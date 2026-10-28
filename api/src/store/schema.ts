@@ -1,13 +1,16 @@
 import { integer, jsonb, pgSchema, primaryKey, serial, text, timestamp } from 'drizzle-orm/pg-core';
 
-// What the sync app did: each run, what it decided for each resident, and what changed.
-export const syncAudit = pgSchema('sync_audit');
+import { snapshots } from '../integrations/lakeside/schema';
 
-export const runs = syncAudit.table('runs', {
+// What the sync app did: each run, what it decided for each resident, and what changed.
+export const sync = pgSchema('sync');
+
+// The property, source file and generated_at are on the snapshot the run processed.
+export const runs = sync.table('runs', {
   id: serial().primaryKey(),
-  propertyId: text().notNull(),
-  snapshotFile: text().notNull(),
-  generatedAt: timestamp({ withTimezone: true }).notNull(),
+  snapshotId: integer()
+    .notNull()
+    .references(() => snapshots.id),
   startedAt: timestamp({ withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -19,7 +22,7 @@ export const runs = syncAudit.table('runs', {
 });
 
 // The latest decision per resident, so staff can see why someone was or was not moved in or out.
-export const decisions = syncAudit.table('decisions', {
+export const decisions = sync.table('decisions', {
   propertyId: text().notNull(),
   unitRemoteId: text().notNull(),
   residentRemoteId: text().notNull(),
@@ -39,7 +42,7 @@ export const decisions = syncAudit.table('decisions', {
   }),
 ]);
 
-export const changeLog = syncAudit.table('change_log', {
+export const changeLog = sync.table('change_log', {
   id: serial().primaryKey(),
   runId: integer().notNull(),
   propertyId: text().notNull(),

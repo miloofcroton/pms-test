@@ -8,24 +8,22 @@ describe('migrations', () => {
   beforeAll(runMigrations);
   afterAll(closeDB);
 
-  it('creates the lakeside_normal, rentlive and sync_audit tables', async () => {
+  it('creates the lakeside, rentlive and sync tables', async () => {
     const { rows } = await db.execute<{
       table_schema: string;
       table_name: string
     }>(sql`
       select table_schema, table_name from information_schema.tables
-      where table_schema in ('lakeside_normal', 'rentlive', 'sync_audit')
+      where table_schema in ('lakeside', 'rentlive', 'sync')
       order by 1, 2
     `);
     expect(rows.map((r) => `${r.table_schema}.${r.table_name}`)).toEqual([
-      'lakeside_normal.lease_customers',
-      'lakeside_normal.leases',
-      'lakeside_normal.properties',
+      'lakeside.snapshots',
       'rentlive.residents',
       'rentlive.units',
-      'sync_audit.change_log',
-      'sync_audit.decisions',
-      'sync_audit.runs',
+      'sync.change_log',
+      'sync.decisions',
+      'sync.runs',
     ]);
   });
 

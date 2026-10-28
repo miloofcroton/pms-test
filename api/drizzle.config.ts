@@ -10,9 +10,9 @@ export default defineConfig({
   ],
   out: './drizzle',
   schemaFilter: [
-    'lakeside_normal',
+    'lakeside',
     'rentlive',
-    'sync_audit',
+    'sync',
   ],
   dbCredentials: {
     url: process.env.DATABASE_URL ?? 'postgres://sync_app:sync_app_dev_password@localhost:5432/sync_app',
