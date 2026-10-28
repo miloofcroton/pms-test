@@ -1,27 +1,20 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
-import { closeDB, runMigrations } from '../../integrations/postgres';
 import { postgresRentLive } from '../rentlive/postgres';
 
-import { freshProperty, removeCreatedProperties, runDays } from './fixtures';
+import { runDays } from './fixtures';
 import { getUnit } from './read-unit';
 
-const AFTER_DAY_2 = freshProperty('read-unit-2');
-const AFTER_DAY_3 = freshProperty('read-unit-3');
+const PROPERTY = '100';
 
+// Days 1 and 2 first; the last describe runs day 3 for itself.
 beforeAll(async () => {
-  await runMigrations();
-  await runDays(AFTER_DAY_2, [1, 2]);
-  await runDays(AFTER_DAY_3, [1, 2, 3]);
-});
-afterAll(async () => {
-  await removeCreatedProperties();
-  await closeDB();
+  await runDays([1, 2]);
 });
 
 describe('getUnit, after day 2', () => {
   it('shows the unit with its raw code and RentLive status', async () => {
-    const found = await getUnit(AFTER_DAY_2, '5001', postgresRentLive);
+    const found = await getUnit(PROPERTY, '5001', postgresRentLive);
     expect(found?.unit).toMatchObject({
       unitNumber: '101',
       rawStatus: 'O1',
@@ -31,7 +24,7 @@ describe('getUnit, after day 2', () => {
   });
 
   it('shows each lease with its status and dates, and the people on it with their type', async () => {
-    const found = await getUnit(AFTER_DAY_2, '5001', postgresRentLive);
+    const found = await getUnit(PROPERTY, '5001', postgresRentLive);
     expect(found?.leases.map((lease) => [lease.remoteId, lease.status, lease.startDate])).toEqual([
       ['9001', 'Past', '2026-10-17'],
       ['9101', 'Current', '2026-10-27'],
@@ -60,7 +53,7 @@ describe('getUnit, after day 2', () => {
   });
 
   it('shows who is moved in right now, from RentLive, with their stored lease', async () => {
-    const found = await getUnit(AFTER_DAY_2, '5001', postgresRentLive);
+    const found = await getUnit(PROPERTY, '5001', postgresRentLive);
     expect(found?.movedIn).toEqual([
       {
         residentRemoteId: '3001',
@@ -78,12 +71,12 @@ describe('getUnit, after day 2', () => {
   });
 
   it('shows a new household after the old one moved out', async () => {
-    const found = await getUnit(AFTER_DAY_2, '5011', postgresRentLive);
+    const found = await getUnit(PROPERTY, '5011', postgresRentLive);
     expect(found?.movedIn.map((resident) => resident.firstName)).toEqual(['Nora']);
   });
 
   it('shows the unit\'s change log, newest first, including its residents\' entries', async () => {
-    const found = await getUnit(AFTER_DAY_2, '5011', postgresRentLive);
+    const found = await getUnit(PROPERTY, '5011', postgresRentLive);
     expect(found?.changes.map((change) => `${change.kind} ${change.residentRemoteId ?? ''}`.trim())).toEqual(expect.arrayContaining([
       'moved_out 3016',
       'moved_in 3021',
@@ -92,7 +85,7 @@ describe('getUnit, after day 2', () => {
   });
 
   it('shows the latest run\'s exceptions on the unit', async () => {
-    const found = await getUnit(AFTER_DAY_2, '5009', postgresRentLive);
+    const found = await getUnit(PROPERTY, '5009', postgresRentLive);
     expect(found?.exceptions).toEqual([
       expect.objectContaining({
         kind: 'review',
@@ -103,28 +96,32 @@ describe('getUnit, after day 2', () => {
   });
 });
 
-describe('getUnit, after day 3, which has no leases', () => {
-  it('shows no leases, because Lakeside sent none', async () => {
-    expect((await getUnit(AFTER_DAY_3, '5001', postgresRentLive))?.leases).toEqual([]);
-  });
-
-  it('still shows who RentLive has moved in, named from the last snapshot that had them', async () => {
-    const found = await getUnit(AFTER_DAY_3, '5001', postgresRentLive);
-    expect(found?.movedIn.map((resident) => resident.firstName)).toEqual(['Alice', 'Bob']);
-  });
-
-  it('shows why: they are missing from the snapshot', async () => {
-    const found = await getUnit(AFTER_DAY_3, '5001', postgresRentLive);
-    expect(found?.exceptions.map((exception) => exception.reason)).toEqual(['missing_from_snapshot', 'missing_from_snapshot']);
-  });
-});
-
 describe('getUnit, not found', () => {
   it('gives null for a unit that is not in the snapshot', async () => {
-    expect(await getUnit(AFTER_DAY_2, '5099', postgresRentLive)).toBeNull();
+    expect(await getUnit(PROPERTY, '5099', postgresRentLive)).toBeNull();
   });
 
   it('gives null for a property it has never synced', async () => {
     expect(await getUnit('no-such-property', '5001', postgresRentLive)).toBeNull();
+  });
+});
+
+describe('getUnit, after day 3, which has no leases', () => {
+  beforeAll(async () => {
+    await runDays([3]);
+  });
+
+  it('shows no leases, because Lakeside sent none', async () => {
+    expect((await getUnit(PROPERTY, '5001', postgresRentLive))?.leases).toEqual([]);
+  });
+
+  it('still shows who RentLive has moved in, named from the last snapshot that had them', async () => {
+    const found = await getUnit(PROPERTY, '5001', postgresRentLive);
+    expect(found?.movedIn.map((resident) => resident.firstName)).toEqual(['Alice', 'Bob']);
+  });
+
+  it('shows why: they are missing from the snapshot', async () => {
+    const found = await getUnit(PROPERTY, '5001', postgresRentLive);
+    expect(found?.exceptions.map((exception) => exception.reason)).toEqual(['missing_from_snapshot', 'missing_from_snapshot']);
   });
 });

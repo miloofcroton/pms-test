@@ -1,10 +1,7 @@
 import { sql } from 'drizzle-orm';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { closeDB, db, getDBStatus, runMigrations } from './postgres';
-
-// One pool for the whole file, so it is closed once.
-afterAll(closeDB);
+import { db, getDBStatus, runMigrations } from './postgres';
 
 describe('database', () => {
   it('is reachable', async () => {
@@ -13,8 +10,6 @@ describe('database', () => {
 });
 
 describe('migrations', () => {
-  beforeAll(runMigrations);
-
   it('creates the lakeside, rentlive and sync tables', async () => {
     const { rows } = await db.execute<{
       table_schema: string;

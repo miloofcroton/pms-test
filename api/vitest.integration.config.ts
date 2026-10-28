@@ -1,11 +1,18 @@
 import { defineConfig } from 'vitest/config';
 
-// Runs against the postgres container: `mise run test:integration` starts it first.
+import { TEST_DATABASE_URL } from './vitest.integration.global';
+
+// Runs against `sync_app_test` in the postgres container, never the app's `sync_app`: `mise run test:integration` starts postgres first.
 export default defineConfig({
   test: {
     include: ['src/**/*.integration.test.ts'],
     environment: 'node',
-    // Tests share one database, so run files one at a time.
+    env: { DATABASE_URL: TEST_DATABASE_URL },
+    // Creates the test database once, if it's missing.
+    globalSetup: ['./vitest.integration.global.ts'],
+    // Migrates and empties it before each file, so every file starts from nothing.
+    setupFiles: ['./vitest.integration.setup.ts'],
+    // Files share the test database, so they run one at a time.
     fileParallelism: false,
   },
 });

@@ -1,26 +1,16 @@
 import { eq, sql } from 'drizzle-orm';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { closeDB, db, runMigrations } from '../../integrations/postgres';
+import { db } from '../../integrations/postgres';
 import { snapshots } from '../lakeside/schema';
 
 import { fetchErrorOf } from './errors';
-import { freshProperty, removeCreatedProperties, removeRuns } from './fixtures';
 import { changeLog, decisions, runs } from './schema';
 
 // A run id no run will ever have, to check the foreign keys.
 const MISSING_RUN = 2_000_000_000;
 
-const PROPERTY = freshProperty('schema');
-// Runs that belong to no property, so they're deleted by id.
-const noPropertyRuns: Array<number> = [];
-
-beforeAll(runMigrations);
-afterAll(async () => {
-  await removeRuns(noPropertyRuns);
-  await removeCreatedProperties();
-  await closeDB();
-});
+const PROPERTY = '100';
 
 const insertSnapshot = async (): Promise<number> => {
   const [snapshot] = await db.insert(snapshots)
@@ -80,7 +70,6 @@ describe('sync.runs', () => {
         },
       })
       .returning();
-    noPropertyRuns.push(run.id);
     expect(snapshot).toMatchObject({
       propertyId: null,
       generatedAt: null,
@@ -101,7 +90,6 @@ describe('sync.runs', () => {
         error,
       })
       .returning();
-    noPropertyRuns.push(run.id);
     const [stored] = await db.select()
       .from(runs)
       .where(eq(runs.id, run.id));

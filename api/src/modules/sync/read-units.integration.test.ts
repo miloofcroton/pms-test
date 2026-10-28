@@ -1,30 +1,23 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
-import { closeDB, runMigrations } from '../../integrations/postgres';
-
-import { freshProperty, removeCreatedProperties, runDays } from './fixtures';
+import { runDays } from './fixtures';
 import { listProperties, listUnits } from './read-units';
 
-const PROPERTY = freshProperty('read-units');
+const PROPERTY = '100';
 
 beforeAll(async () => {
-  await runMigrations();
-  await runDays(PROPERTY, [1, 2]);
-});
-afterAll(async () => {
-  await removeCreatedProperties();
-  await closeDB();
+  await runDays([1, 2]);
 });
 
 describe('listProperties', () => {
   it('lists every property with a successful run', async () => {
-    expect(await listProperties()).toEqual(expect.arrayContaining([
+    expect(await listProperties()).toEqual([
       {
         remoteId: PROPERTY,
         name: 'Harbor View Apartments',
         timezone: 'America/Los_Angeles',
       },
-    ]));
+    ]);
   });
 });
 

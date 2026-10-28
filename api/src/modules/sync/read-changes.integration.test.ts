@@ -1,22 +1,15 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
-import { closeDB, runMigrations } from '../../integrations/postgres';
-
-import { freshProperty, removeCreatedProperties, runDays } from './fixtures';
+import { runDays } from './fixtures';
 import { listChanges } from './read-changes';
 import { getProperty, okSnapshots } from './read-snapshots';
 import type { RunReport } from './runner';
 
-const PROPERTY = freshProperty('read-changes');
+const PROPERTY = '100';
 let reports: Array<RunReport>;
 
 beforeAll(async () => {
-  await runMigrations();
-  reports = await runDays(PROPERTY, [1, 1, 2]);
-});
-afterAll(async () => {
-  await removeCreatedProperties();
-  await closeDB();
+  reports = await runDays([1, 1, 2]);
 });
 
 describe('okSnapshots and getProperty', () => {

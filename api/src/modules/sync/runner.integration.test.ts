@@ -1,26 +1,16 @@
 import { and, eq, inArray } from 'drizzle-orm';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
-import { closeDB, db, runMigrations } from '../../integrations/postgres';
+import { db } from '../../integrations/postgres';
 import { snapshots } from '../lakeside/schema';
 
-import { freshProperty, postgresDeps, removeCreatedProperties, removeRuns, snapshotPath as day } from './fixtures';
+import { postgresDeps as deps, snapshotPath as day } from './fixtures';
 import { runSync } from './runner';
 import { changeLog, decisions, exceptions, runs } from './schema';
 import type { RunReport } from './runner';
 
-// The A1 scenario end to end, on the real tables and the Postgres RentLive mock, under a property id of its own.
-const PROPERTY = freshProperty('runner');
-const deps = postgresDeps(PROPERTY);
-// Runs that never got a snapshot belong to no property, so they're deleted by id.
-const noSnapshotRuns: Array<number> = [];
-
-beforeAll(runMigrations);
-afterAll(async () => {
-  await removeRuns(noSnapshotRuns);
-  await removeCreatedProperties();
-  await closeDB();
-});
+// The A1 scenario end to end, on the real tables and the Postgres RentLive mock.
+const PROPERTY = '100';
 
 describe('runSync on Postgres, days 1 to 3, each run twice', () => {
   const reports: Array<RunReport> = [];
@@ -108,7 +98,6 @@ describe('runSync on Postgres, days 1 to 3, each run twice', () => {
 describe('runSync on Postgres, a failed fetch', () => {
   it('stores the run with its error and no snapshot', async () => {
     const report = await runSync('data/missing.json', deps);
-    noSnapshotRuns.push(report.runId);
     const [stored] = await db.select()
       .from(runs)
       .where(eq(runs.id, report.runId));
