@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-DATA = Path(__file__).resolve().parent.parent / "candidate" / "data"
+DATA = Path(__file__).resolve().parent.parent / "data"
 FILES = ["day1.json", "day2.json", "day3.json"]
 DATE = re.compile(r"^\d{2}/\d{2}/\d{4}$")
 
