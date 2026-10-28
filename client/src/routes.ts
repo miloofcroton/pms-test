@@ -5,4 +5,5 @@ export default [
   index('routes/runs.tsx'),
   route('runs/:runId', 'routes/run.tsx'),
   route('properties/:propertyId/units', 'routes/units.tsx'),
+  route('properties/:propertyId/units/:unitId', 'routes/unit.tsx'),
 ] satisfies RouteConfig;
