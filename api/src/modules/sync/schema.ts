@@ -2,25 +2,59 @@ import { index, integer, jsonb, pgSchema, primaryKey, serial, text, timestamp } 
 
 import { snapshots } from '../lakeside/schema';
 
+import type { RunError } from './errors';
 import type { ExceptionKind, SyncException } from './exceptions';
 
-// What the sync app did: each run, what it decided for each resident, and what changed.
+// What the sync app did: each run, what it decided for each resident, what changed, and every exception it found.
 export const sync = pgSchema('sync');
 
-// The property, source file and generated_at are on the snapshot the run processed.
+// `ok`: the run finished.
+// `refused`: a `stale` error, because the snapshot was older than the last run's, so nothing was applied.
+// `failed`: any other error stopped it.
+export type RunStatus = 'running' | 'ok' | 'refused' | 'failed';
+
+// The brief's counts for the runs view.
+export type RunCounts = {
+  unitsUpserted: number;
+  residentsUpserted: number;
+  movedIn: number;
+  movedOut: number;
+  // Records never upserted to RentLive: those a data exception left out (see `leavesRecordOut`), and residents the 14-day rule doesn't sync.
+  skipped: number;
+  // Decisions flagged for review: review exceptions.
+  flagged: number;
+};
+
+export const noCounts: RunCounts = {
+  unitsUpserted: 0,
+  residentsUpserted: 0,
+  movedIn: 0,
+  movedOut: 0,
+  skipped: 0,
+  flagged: 0,
+};
+
+// The property and generated_at are on the snapshot the run processed.
 export const runs = sync.table('runs', {
   id: serial().primaryKey(),
-  snapshotId: integer()
+  // What the run tried to fetch, kept even when the fetch failed.
+  source: text().notNull(),
+  // Null when the fetch failed, so there was no snapshot to store.
+  snapshotId: integer().references(() => snapshots.id),
+  status: text()
+    .$type<RunStatus>()
     .notNull()
-    .references(() => snapshots.id),
+    .default('running'),
+  // The one error that stopped a failed run: fetch, structure or crash. See `errors.ts`.
+  error: jsonb().$type<RunError>(),
   startedAt: timestamp({ withTimezone: true })
     .notNull()
     .defaultNow(),
   finishedAt: timestamp({ withTimezone: true }),
   counts: jsonb()
-    .$type<Record<string, number>>()
+    .$type<RunCounts>()
     .notNull()
-    .default({}),
+    .default(noCounts),
 });
 
 // The latest decision per resident, so staff can see why someone was or was not moved in or out.
@@ -30,7 +64,9 @@ export const decisions = sync.table('decisions', {
   residentRemoteId: text().notNull(),
   action: text().notNull(),
   reason: text().notNull(),
-  runId: integer().notNull(),
+  runId: integer()
+    .notNull()
+    .references(() => runs.id),
   decidedAt: timestamp({ withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -46,7 +82,9 @@ export const decisions = sync.table('decisions', {
 
 export const changeLog = sync.table('change_log', {
   id: serial().primaryKey(),
-  runId: integer().notNull(),
+  runId: integer()
+    .notNull()
+    .references(() => runs.id),
   propertyId: text().notNull(),
   unitRemoteId: text(),
   residentRemoteId: text(),
@@ -58,17 +96,19 @@ export const changeLog = sync.table('change_log', {
   recordedAt: timestamp({ withTimezone: true })
     .notNull()
     .defaultNow(),
-});
+}, (t) => [
+  // For the unit and resident pages' timelines.
+  index().on(t.propertyId, t.unitRemoteId, t.residentRemoteId),
+]);
 
-// Every exception each run found: snapshot (the run failed), record (data left out) and review (a decision was flagged).
+// Every exception each run found inside the data: data (a record left out) and review (a decision flagged).
 // Recorded again on every run, so the latest run's rows are the current list. See `exceptions.ts`.
 export const exceptions = sync.table('exceptions', {
   id: serial().primaryKey(),
   runId: integer()
     .notNull()
     .references(() => runs.id),
-  // Null when a snapshot exception left the property unreadable.
-  propertyId: text(),
+  propertyId: text().notNull(),
   kind: text()
     .$type<ExceptionKind>()
     .notNull(),
@@ -78,10 +118,6 @@ export const exceptions = sync.table('exceptions', {
   unitRemoteId: text(),
   leaseRemoteId: text(),
   residentRemoteId: text(),
-  details: jsonb()
-    .$type<Record<string, unknown>>()
-    .notNull()
-    .default({}),
   recordedAt: timestamp({ withTimezone: true })
     .notNull()
     .defaultNow(),

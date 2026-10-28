@@ -22,7 +22,7 @@ We treat the brief's mappings and rules as a contract. Bad data from Lakeside ne
 
 | Case | Example | Expected |
 |---|---|---|
-| Duplicate unit | 5003 appears twice on day 1, identically | One unit. Day 1 has 16 units, not 17. Copies that differ would leave the unit and its leases out, with a record exception |
+| Duplicate unit | 5003 appears twice on day 1, identically | One unit. Day 1 has 16 units, not 17. Copies that differ would leave the unit and its leases out, with a data exception |
 | Numeric ids | Unit `id: 5001` while lease `unitId: "5001"`, property `id: 100` | Every id is a string |
 | Known codes | `O1`, `O2`, `V1`, `V2`, `M`, `C` | Occupied, Occupied, Vacant, Vacant, Model, Common Area |
 | Unknown code | `O3` (5009), `X` (5016), `D` (5015 on day 2) | Down |
@@ -51,7 +51,7 @@ We treat the brief's mappings and rules as a contract. Bad data from Lakeside ne
 | Same person on two leases of one unit | Day 2: Alice, Bob and Gary on L9001 (Past, moved out 10/26) and L9101 (Current) on 5001 | One resident per unit and person. The Current lease wins for status, dates and lease id |
 | Statuses not in the data | `Applicant` | Synthetic test: treated as not Current, never moved in |
 | Unused field | `isMonthToMonth` is 0 everywhere | Ignored |
-| A list sent as a single object | Day 1: L9010 (Liam) has `customers.customer` as one object, not a one-item list. Every other lease sends a list | Leave just that lease out, with a record exception, and accept the rest of the snapshot. Liam is never moved in. See the decisions below |
+| A list sent as a single object | Day 1: L9010 (Liam) has `customers.customer` as one object, not a one-item list. Every other lease sends a list | Leave just that lease out, with a data exception, and accept the rest of the snapshot. Liam is never moved in. See the decisions below |
 | A lease missing from a later snapshot | L9010 (Liam on 5010) is on day 1 but not day 2, while unit 5010 is still `O1` | Nothing happens to Liam, because his lease was already left out on day 1. Had he been moved in, he would stay moved in and be flagged as missing: a missing lease never moves anyone out |
 
 ## Rules engine
@@ -85,13 +85,34 @@ We treat the brief's mappings and rules as a contract. Bad data from Lakeside ne
 | Case | Example | Expected |
 |---|---|---|
 | Unit status changes | Day 2: 5003 V1 to O1, 5004 V2 to O1, 5006 O2 to V2, 5008 o1 to V2, 5012 `""` to O1 | "Unit status changed" entries |
-| Raw code changes but the mapped status doesn't | 5015 `null` to `D`, both Down | Pending decision: log the raw change or not |
+| Raw code changes but the mapped status doesn't | 5015 `null` to `D`, both Down | A "unit status changed" entry for the raw code, because the UI shows it |
 | Lease changed | 5001 on day 2: L9101 added, L9001 went Past. Gary's move-in date changed to 10/27 | "Lease changed" and "resident updated" entries with the fields that changed |
 | New resident | Uma on 5001, Mia on 5012, Tina on 5008 (all day 2) | "Resident created" |
 | Snapshot with units but no leases | Day 3 | See "Day 3" below |
 | Rerun any snapshot | Day 1, 2 or 3 twice | A new row in the runs list, no new change-log entries, no RentLive calls that change anything |
-| Flags on rerun | Paul, Quinn and Jack | The flag is written once, not once per run |
-| Run fails partway | Synthetic | The run is marked failed with its error, and it can be run again safely |
+| Exceptions on rerun | Paul and Quinn (data), Jack (review) | `sync.exceptions` records them again for the new run, so the latest run's rows are the current list. The change log gets one "flagged for review" entry when a review exception first appears, not one per run |
+| Run fails partway | Synthetic | A `crash` error: the run is `failed`, and it can be run again safely |
+
+## Run errors
+
+Each error stops the whole run: nothing in the snapshot is applied, the run still shows in the runs list, and no change-log entries or exceptions are written. None of these happen in the data, so each is a synthetic test.
+
+| Case | Error | Run status | Stored |
+|---|---|---|---|
+| The snapshot file doesn't exist | `fetch`, `snapshot_not_found` | `failed` | The run, with no snapshot |
+| The path can't be read as a file | `fetch`, `snapshot_unreadable` | `failed` | The run, with no snapshot |
+| The file isn't JSON | `fetch`, `snapshot_invalid_json` | `failed` | The run, with no snapshot |
+| The JSON breaks the contract, for example no `units` list | `structure`, `invalid_structure`, with the field and value | `failed` | The run and the snapshot, without its property or `generated_at` if those can't be read |
+| The snapshot is older than the last run's, for example day 1 after day 2 | `stale`, `snapshot_older_than_last_run`, with both timestamps | `refused` | The run and the snapshot |
+| Something unexpected throws partway | `crash`, `run_crashed`, with the message | `failed` | The run, and whatever it had already written |
+| Running again after any of these | none, if the cause is fixed | `ok` | A new run, as if the failed one hadn't happened |
+
+## Counts
+
+The runs view shows the counts the instructions ask for: units and residents upserted, move-ins, move-outs, and records skipped or flagged.
+
+- **Skipped:** records never upserted to RentLive. Those a data exception left out (a unit, a lease with everyone on it, or a customer), and residents the 14-day rule doesn't sync. A data exception that keeps its record, such as a lease without dates, isn't a skip. Day 1: 6 (the leases of Liam, Paul and Quinn, and Wendy, Rita and Victor).
+- **Flagged:** residents upserted to RentLive whom the rules couldn't safely decide, so nobody was moved: the review exceptions. Day 1: 2 (Sam and Ivy).
 
 ## Expected outcomes per day
 
@@ -118,16 +139,16 @@ The rules already protect people here. A move-out needs an effective status that
 - A snapshot older than the last run (for example day 1 after day 2): refuse it, because stale data could move people in or out. The refused run still appears in the runs list. Rerunning the same snapshot is allowed and changes nothing.
 - A Past resident from more than 14 days ago who is still moved in on RentLive: not in the data. Flag them for review rather than skipping them silently.
 - A date that isn't `MM/DD/YYYY` (for example `10/1/2026`, `2026-10-17` or `02/30/2026`): not in the data. Reject it rather than guess, and flag the customer. Reading it as "no date" would be unsafe, because a Current resident with a broken move-out date would look like they have none and could be moved in. (Agreed 2026-10-28.)
-- A list sent as a single object (L9010's `customers.customer` on day 1, the only lease that does it): leave just that lease out with a record exception, and accept the rest of the snapshot. It is one inconsistent record, not a systematic format, since every other single-customer lease sends a one-item list. Failing the whole run would stop the sync for everyone over one record. Liam is never moved in, which is the safe direction. (Agreed 2026-10-28.)
-- A lease whose interval in effect has a broken date: keep the lease without dates, with a record exception. Those dates are only shown in the UI, never used by the rules. (Agreed 2026-10-28.)
+- A list sent as a single object (L9010's `customers.customer` on day 1, the only lease that does it): leave just that lease out with a data exception, and accept the rest of the snapshot. It is one inconsistent record, not a systematic format, since every other single-customer lease sends a one-item list. Failing the whole run would stop the sync for everyone over one record. Liam is never moved in, which is the safe direction. (Agreed 2026-10-28.)
+- A lease whose interval in effect has a broken date: keep the lease without dates, with a data exception. Those dates are only shown in the UI, never used by the rules. (Agreed 2026-10-28.)
 - Later, not in v1: a way in the UI for staff to approve a flagged or left-out record by hand, such as moving Liam in.
 
 ## Decisions made while building the rules (2026-10-28, for review)
 
 Each one takes the safe side: when the rules don't settle a case, nobody is moved, and the case is flagged so staff can see it.
 
-- Three kinds of exception, so the client can sort them. A **snapshot exception** (`SnapshotException`) means the structure breaks the contract, for example no `units` list, a unit or lease with no id, or a `generated_at` that isn't a timestamp: it is thrown, the whole run fails, and nobody is moved. A **record exception** (`RecordException`, in `snapshot.exceptions`) means one record's values break it: that record is left out, or kept without the broken part, and the rest of the snapshot is used. A **review exception** is a decision the rules flagged, like Jack's on day 2: the data is valid, but the case can't be settled safely, so nobody is moved. Every run records all three in `sync.exceptions`, so the latest run's rows are the current list. An exception doesn't have to stop the code.
-- Two copies of a unit that differ: an exception, not a choice. The unit is left out with a record exception, and so are its leases, since no copy can be trusted. Anyone already moved in there is flagged as missing from the snapshot and stays moved in. Identical copies (5003 on day 1) are one unit, with no record exception.
+- Errors and exceptions are separate, so the client can sort them. An **error** concerns the whole run: the run fails, nobody is moved, and a run has at most one, stored on the run as `sync.runs.error`. Its kind is `fetch` (the snapshot file is missing, unreadable or not JSON), `structure` (a `SnapshotError`: the snapshot breaks the contract, for example no `units` list or a lease with no id) or `crash` (something unexpected broke partway). An **exception** concerns something inside the data, and the rest of the run goes ahead. Its kind is `data` (a `RecordException`: one record is left out, or kept without the broken part) or `review` (the rules flagged a decision, like Jack's on day 2, so nobody is moved). Every run records its exceptions in `sync.exceptions`, so the latest run's rows are the current list.
+- Two copies of a unit that differ: an exception, not a choice. The unit is left out with a data exception, and so are its leases, since no copy can be trusted. Anyone already moved in there is flagged as missing from the snapshot and stays moved in. Identical copies (5003 on day 1) are one unit, with no data exception.
 - A person on several leases of one unit: their Current lease wins, whichever order the leases arrive in. If two are Current, the lease that started last wins.
 - A Current lease signer with no move-in date: not moved in, flagged. There is no date to check against the window.
 - A moved-in resident who is still Current but whose move-out date is today or earlier: left moved in, flagged. The move-out rule needs them not to be Current, so the status and the date contradict each other, like Ivy on day 1.

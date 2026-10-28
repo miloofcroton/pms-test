@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { normalizeSnapshot, parseLakesideDate, SnapshotException } from './normalize';
+import { leavesRecordOut, normalizeSnapshot, parseLakesideDate, SnapshotError } from './normalize';
 
 describe('parseLakesideDate', () => {
   it('turns MM/DD/YYYY into ISO', () => {
@@ -116,10 +116,10 @@ describe('normalizeSnapshot', () => {
 
   });
 
-  // A snapshot exception fails the whole run, so nobody is moved.
+  // A snapshot error fails the whole run, so nobody is moved.
   // A record exception leaves one record out, or keeps it without the broken part, and the rest of the snapshot is used.
-  describe('snapshot exceptions', () => {
-    const exceptionFrom = (raw: unknown): unknown => {
+  describe('snapshot errors', () => {
+    const errorFrom = (raw: unknown): unknown => {
       try {
         normalizeSnapshot(raw);
       }
@@ -156,9 +156,9 @@ describe('normalizeSnapshot', () => {
         'snapshot',
       ],
     ])('rejects %s, naming the field', (_, raw, field) => {
-      const exception = exceptionFrom(raw);
-      expect(exception).toBeInstanceOf(SnapshotException);
-      expect(exception).toMatchObject({ field });
+      const error = errorFrom(raw);
+      expect(error).toBeInstanceOf(SnapshotError);
+      expect(error).toMatchObject({ field });
     });
   });
 
@@ -433,5 +433,25 @@ describe('normalizeSnapshot', () => {
         },
       ]);
     });
+  });
+});
+
+describe('leavesRecordOut', () => {
+  it.each([
+    'duplicate_unit_differs',
+    'lease_on_conflicting_unit',
+    'lease_without_unit',
+    'lease_unit_not_in_snapshot',
+    'lease_customers_not_a_list',
+    'customer_invalid_date',
+  ] as const)('is true for %s, which leaves the record out', (reason) => {
+    expect(leavesRecordOut(reason)).toBe(true);
+  });
+
+  it.each([
+    'lease_interval_not_found',
+    'lease_interval_invalid_date',
+  ] as const)('is false for %s, which keeps the lease without its dates', (reason) => {
+    expect(leavesRecordOut(reason)).toBe(false);
   });
 });

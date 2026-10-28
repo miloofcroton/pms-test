@@ -15,6 +15,13 @@
       "when": 1793165276378,
       "tag": "0001_exceptions",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793168775533,
+      "tag": "0002_run_bookkeeping",
+      "breakpoints": true
     }
   ]
 }

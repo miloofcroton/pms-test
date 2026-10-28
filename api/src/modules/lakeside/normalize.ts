@@ -61,18 +61,18 @@ export type RecordExceptionReason =
   // A move-in or move-out date isn't MM/DD/YYYY, so the customer is left out.
   | 'customer_invalid_date';
 
-// The two kinds of exception a snapshot can raise.
-// A `SnapshotException` means the structure breaks the contract: it is thrown, the whole run fails, and nobody is moved.
+// An error concerns the whole snapshot, and an exception concerns something inside it.
+// A `SnapshotError` means the structure breaks the contract: it is thrown, the whole run fails, and nobody is moved.
 // A `RecordException` means one record's values break it: that record is left out, or kept without the broken part, and the rest of the snapshot is used.
 
-export class SnapshotException extends Error {
+export class SnapshotError extends Error {
   constructor(
     // The path of the field that broke the contract, such as `lease.id`.
     readonly field: string,
     readonly value: unknown,
   ) {
     super(`Lakeside snapshot has an unexpected ${field}: ${JSON.stringify(value)}`);
-    this.name = 'SnapshotException';
+    this.name = 'SnapshotError';
   }
 }
 
@@ -82,6 +82,14 @@ export type RecordException = {
   unitRemoteId: string | null;
   leaseRemoteId: string | null;
   customerRemoteId: string | null;
+};
+
+// The two reasons that keep the lease, only without its dates.
+const KEEPS_RECORD = new Set<RecordExceptionReason>(['lease_interval_not_found', 'lease_interval_invalid_date']);
+
+/** Whether the exception left its record out of the snapshot, so it was never sent to RentLive. */
+export const leavesRecordOut = (reason: RecordExceptionReason): boolean => {
+  return !KEEPS_RECORD.has(reason);
 };
 
 export type NormalizedSnapshot = {
@@ -122,7 +130,7 @@ const isRealDay = (year: number, month: number, day: number): boolean => {
 
 /**
  * Turns a raw snapshot, as the Lakeside client decoded it, into a `NormalizedSnapshot`.
- * Throws a `SnapshotException` when the structure breaks the contract.
+ * Throws a `SnapshotError` when the structure breaks the contract.
  * Adds a `RecordException` to `exceptions` when one record's values break it.
  */
 export const normalizeSnapshot = (raw: unknown): NormalizedSnapshot => {
@@ -333,15 +341,15 @@ const recordException = (reason: RecordExceptionReason, ids: Partial<Omit<Record
 };
 
 // Readers for the raw JSON.
-// Each throws a `SnapshotException` on a value of the wrong shape, naming the field, so a broken snapshot fails loudly.
+// Each throws a `SnapshotError` on a value of the wrong shape, naming the field, so a broken snapshot fails loudly.
 
-const snapshotException = (field: string, value: unknown): SnapshotException => {
-  return new SnapshotException(field, value);
+const snapshotError = (field: string, value: unknown): SnapshotError => {
+  return new SnapshotError(field, value);
 };
 
 const record = (value: unknown, field: string): Record<string, unknown> => {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    throw snapshotException(field, value);
+    throw snapshotError(field, value);
   }
   return value as Record<string, unknown>;
 };
@@ -352,7 +360,7 @@ const optionalRecord = (value: unknown, field: string): Record<string, unknown> 
 
 const list = (value: unknown, field: string): Array<unknown> => {
   if (!Array.isArray(value)) {
-    throw snapshotException(field, value);
+    throw snapshotError(field, value);
   }
   return value;
 };
@@ -368,13 +376,13 @@ const optionalText = (value: unknown, field: string): string | null => {
   if (typeof value === 'number') {
     return String(value);
   }
-  throw snapshotException(field, value);
+  throw snapshotError(field, value);
 };
 
 const requiredText = (value: unknown, field: string): string => {
   const text = optionalText(value, field);
   if (text === null) {
-    throw snapshotException(field, value);
+    throw snapshotError(field, value);
   }
   return text;
 };
@@ -387,13 +395,13 @@ const rawCode = (value: unknown, field: string): string | null => {
   if (typeof value === 'string') {
     return value;
   }
-  throw snapshotException(field, value);
+  throw snapshotError(field, value);
 };
 
 const timestamp = (value: unknown, field: string): string => {
   const text = requiredText(value, field);
   if (Number.isNaN(Date.parse(text))) {
-    throw snapshotException(field, value);
+    throw snapshotError(field, value);
   }
   return text;
 };
