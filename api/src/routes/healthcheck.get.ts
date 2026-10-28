@@ -1,4 +1,4 @@
-import { getDBStatus } from '../db';
+import { getDBStatus } from '../utils/db';
 
 export default defineEventHandler(async () => ({
   status: 'healthy',
