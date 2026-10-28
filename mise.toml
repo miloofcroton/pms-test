@@ -39,6 +39,12 @@ description = "Wipe postgres and start it empty"
 run = "npm --prefix api run dev"
 description = "Run the api with hot reload on :4444"
 
+# Sync operations
+[tasks.sync]
+depends = ["db:up"]
+run = "npm --prefix api run --silent sync --"
+description = "Run one snapshot through the sync and print what it did: mise run sync data/day1.json"
+
 # Client operations
 [tasks."client:dev"]
 run = "npm --prefix client run dev"

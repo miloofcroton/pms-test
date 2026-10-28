@@ -8,6 +8,7 @@
     "drizzle-kit": "^0.31.11",
     "nitropack": "2.11.6",
     "typescript": "^5.7.2",
+    "vite-node": "^3.2.4",
     "vitest": "^3.0.8"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "dev": "PORT=4444 nitro dev",
     "prepare": "nitro prepare",
     "preview": "node .output/server/index.mjs",
+    "sync": "vite-node src/cli/sync.ts",
     "test:integration": "vitest run -c vitest.integration.config.ts",
     "test:unit": "vitest run -c vitest.unit.config.ts",
     "typecheck": "tsc --noEmit"

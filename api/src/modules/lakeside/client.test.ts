@@ -34,7 +34,8 @@ describe('fileClient.fetchSnapshot', () => {
     expect(await fileClient.fetchSnapshot(join(folder, 'missing.json'))).toEqual({
       ok: false,
       error: 'not_found',
-      message: expect.stringContaining('missing.json'),
+      // Node's message names the path, so the client doesn't add it a second time.
+      message: expect.stringMatching(/^ENOENT: .*missing\.json'$/),
     });
   });
 

@@ -30,7 +30,7 @@ export const fileClient: LakesideClient = {
     }
     catch (error) {
       const code = (error as NodeJS.ErrnoException).code;
-      return failure(code === 'ENOENT' ? 'not_found' : 'unreadable', `${source}: ${(error as Error).message}`);
+      return failure(code === 'ENOENT' ? 'not_found' : 'unreadable', (error as Error).message);
     }
 
     try {
