@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { leavesRecordOut, normalizeSnapshot, parseLakesideDate, SnapshotError } from './normalize';
+import { leavesRecordOut, normalizeSnapshot, parseLakesideDate, peekSnapshot, SnapshotError } from './normalize';
 
 describe('parseLakesideDate', () => {
   it('turns MM/DD/YYYY into ISO', () => {
@@ -453,5 +453,32 @@ describe('leavesRecordOut', () => {
     'lease_interval_invalid_date',
   ] as const)('is false for %s, which keeps the lease without its dates', (reason) => {
     expect(leavesRecordOut(reason)).toBe(false);
+  });
+});
+
+describe('peekSnapshot', () => {
+  it('reads the property and generated_at of a readable snapshot', () => {
+    expect(peekSnapshot(rawSnapshot())).toEqual({
+      propertyId: '100',
+      generatedAt: '2026-10-28T06:30:00Z',
+    });
+  });
+
+  it('still reads them when the rest of the snapshot is broken', () => {
+    expect(peekSnapshot(rawSnapshot({ units: 'not a list' }))).toEqual({
+      propertyId: '100',
+      generatedAt: '2026-10-28T06:30:00Z',
+    });
+  });
+
+  it('gives null for whatever it cannot read, and never throws', () => {
+    expect(peekSnapshot([])).toEqual({
+      propertyId: null,
+      generatedAt: null,
+    });
+    expect(peekSnapshot({ meta: { generated_at: 'last night' } })).toEqual({
+      propertyId: null,
+      generatedAt: null,
+    });
   });
 });

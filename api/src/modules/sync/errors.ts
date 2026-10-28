@@ -64,9 +64,10 @@ export const staleErrorOf = (generatedAt: string, lastGeneratedAt: string): RunE
   return {
     kind: 'stale',
     reason: 'snapshot_older_than_last_run',
+    // The same format for both, since one comes from the snapshot as sent and the other back from the database.
     details: {
-      generatedAt,
-      lastGeneratedAt,
+      generatedAt: new Date(generatedAt).toISOString(),
+      lastGeneratedAt: new Date(lastGeneratedAt).toISOString(),
     },
   };
 };

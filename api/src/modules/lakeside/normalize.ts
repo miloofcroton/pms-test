@@ -405,3 +405,22 @@ const timestamp = (value: unknown, field: string): string => {
   }
   return text;
 };
+
+/** The property and `generated_at` of a raw snapshot, as far as they can be read, so even a broken snapshot can be stored with them. */
+export const peekSnapshot = (raw: unknown): {
+  propertyId: string | null;
+  generatedAt: string | null
+} => {
+  const read = <T>(reader: () => T): T | null => {
+    try {
+      return reader();
+    }
+    catch {
+      return null;
+    }
+  };
+  return {
+    propertyId: read(() => requiredText(record(record(raw, 'snapshot').property, 'property').id, 'property.id')),
+    generatedAt: read(() => timestamp(record(record(raw, 'snapshot').meta, 'meta').generated_at, 'meta.generated_at')),
+  };
+};

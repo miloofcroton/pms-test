@@ -53,13 +53,20 @@ describe('crashErrorOf', () => {
 });
 
 describe('staleErrorOf', () => {
+  it('writes both timestamps the same way, whatever format each arrived in', () => {
+    expect(staleErrorOf('2026-10-28T06:30:00Z', '2026-10-29T06:30:00.000Z').details).toEqual({
+      generatedAt: '2026-10-28T06:30:00.000Z',
+      lastGeneratedAt: '2026-10-29T06:30:00.000Z',
+    });
+  });
+
   it('refuses a snapshot older than the last run, keeping both timestamps', () => {
-    expect(staleErrorOf('2026-10-28T06:30:00Z', '2026-10-29T06:30:00Z')).toEqual({
+    expect(staleErrorOf('2026-10-28T06:30:00Z', '2026-10-29T06:30:00.000Z')).toEqual({
       kind: 'stale',
       reason: 'snapshot_older_than_last_run',
       details: {
-        generatedAt: '2026-10-28T06:30:00Z',
-        lastGeneratedAt: '2026-10-29T06:30:00Z',
+        generatedAt: '2026-10-28T06:30:00.000Z',
+        lastGeneratedAt: '2026-10-29T06:30:00.000Z',
       },
     }); // day 1 after day 2
   });
