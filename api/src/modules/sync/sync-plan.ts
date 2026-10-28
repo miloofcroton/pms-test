@@ -1,47 +1,58 @@
 import type { NormalizedSnapshot } from '../lakeside/normalize';
 
+import { localToday } from './dates';
+import { residentKey } from './rentlive-state';
+import { residentsOf } from './residents';
+import { decideUnit } from './rules';
+import type { RentLiveState, ResidentState } from './rentlive-state';
+import type { Decision } from './rules';
+
 // The pure sync pipeline: a normalized Lakeside snapshot and what RentLive has stored go in, and what to do about each resident comes out.
 // No I/O, so every rule can be tested without a database.
 
-/** What RentLive stores for one resident on one unit. */
-export type ResidentState = {
-  movedIn: boolean;
-  everMovedOut: boolean;
-  leaseRemoteId: string | null;
-};
-
-/** Keyed by `residentKey`, because RentLive identifies a resident by unit and resident together. */
-export type RentLiveState = ReadonlyMap<string, ResidentState>;
-
-export type Action = 'move_in' | 'move_out' | 'none';
-
-/** One per resident in the snapshot, and one per moved-in resident missing from it. */
-export type Decision = {
-  unitRemoteId: string;
-  residentRemoteId: string;
-  leaseRemoteId: string | null;
-  action: Action;
-  reason: string;
-  flagged: boolean;
-};
-
 export type SyncPlan = {
   today: string;
+  // Unit by unit, and within a unit move-outs first, then move-ins.
   decisions: Array<Decision>;
 };
 
-export function residentKey(unitRemoteId: string, residentRemoteId: string): string {
-  return `${unitRemoteId}/${residentRemoteId}`;
-}
+export const syncPlan = (snapshot: NormalizedSnapshot, state: RentLiveState): SyncPlan => {
+  const today = localToday(snapshot.generatedAt, snapshot.property.timezone);
+  const residents = residentsOf(snapshot, today);
+  const stored = [...state.values()];
 
-export function emptyState(): RentLiveState {
-  return new Map();
-}
+  // Units RentLive has residents on count too, so someone moved in on a unit the snapshot dropped is still found.
+  const unitIds = new Set([...snapshot.units.map((unit) => unit.remoteId), ...stored.map((resident) => resident.unitRemoteId)]);
+  const decisions = [...unitIds].flatMap((unitRemoteId) => decideUnit(
+    residents.filter((resident) => resident.unitRemoteId === unitRemoteId),
+    stored.filter((resident) => resident.unitRemoteId === unitRemoteId),
+    today,
+  ));
 
-export function syncPlan(snapshot: NormalizedSnapshot, state: RentLiveState): SyncPlan {
-  throw new Error('Not implemented');
-}
+  return {
+    today,
+    decisions,
+  };
+};
 
-export function applyPlan(state: RentLiveState, plan: SyncPlan): RentLiveState {
-  throw new Error('Not implemented');
-}
+/** What RentLive would store after the plan: every decided resident upserted, then moved in or out. */
+export const applyPlan = (state: RentLiveState, plan: SyncPlan): RentLiveState => {
+  const next = new Map(state);
+  for (const decision of plan.decisions) {
+    const key = residentKey(decision.unitRemoteId, decision.residentRemoteId);
+    const before: ResidentState = next.get(key) ?? {
+      unitRemoteId: decision.unitRemoteId,
+      residentRemoteId: decision.residentRemoteId,
+      movedIn: false,
+      everMovedOut: false,
+      leaseRemoteId: null,
+    };
+    next.set(key, {
+      ...before,
+      leaseRemoteId: decision.leaseRemoteId ?? before.leaseRemoteId,
+      movedIn: decision.action === 'none' ? before.movedIn : decision.action === 'move_in',
+      everMovedOut: before.everMovedOut || decision.action === 'move_out',
+    });
+  }
+  return next;
+};

@@ -22,7 +22,7 @@ We treat the brief's mappings and rules as a contract. Bad data from Lakeside ne
 
 | Case | Example | Expected |
 |---|---|---|
-| Duplicate unit | 5003 appears twice on day 1 | One unit. Day 1 has 16 units, not 17 |
+| Duplicate unit | 5003 appears twice on day 1, identically | One unit. Day 1 has 16 units, not 17. Copies that differ would leave the unit and its leases out, with a record exception |
 | Numeric ids | Unit `id: 5001` while lease `unitId: "5001"`, property `id: 100` | Every id is a string |
 | Known codes | `O1`, `O2`, `V1`, `V2`, `M`, `C` | Occupied, Occupied, Vacant, Vacant, Model, Common Area |
 | Unknown code | `O3` (5009), `X` (5016), `D` (5015 on day 2) | Down |
@@ -51,12 +51,14 @@ We treat the brief's mappings and rules as a contract. Bad data from Lakeside ne
 | Same person on two leases of one unit | Day 2: Alice, Bob and Gary on L9001 (Past, moved out 10/26) and L9101 (Current) on 5001 | One resident per unit and person. The Current lease wins for status, dates and lease id |
 | Statuses not in the data | `Applicant` | Synthetic test: treated as not Current, never moved in |
 | Unused field | `isMonthToMonth` is 0 everywhere | Ignored |
+| A list sent as a single object | Day 1: L9010 (Liam) has `customers.customer` as one object, not a one-item list. Every other lease sends a list | Leave just that lease out, with a record exception, and accept the rest of the snapshot. Liam is never moved in. See the decisions below |
+| A lease missing from a later snapshot | L9010 (Liam on 5010) is on day 1 but not day 2, while unit 5010 is still `O1` | Nothing happens to Liam, because his lease was already left out on day 1. Had he been moved in, he would stay moved in and be flagged as missing: a missing lease never moves anyone out |
 
 ## Rules engine
 
 | Case | Who | Expected |
 |---|---|---|
-| Current, inside the window, never moved in | Liam (day 1) | Move in |
+| Current, inside the window, never moved in | Alice (day 1) | Move in |
 | Current, moved in outside the window | Carol, 09/01 | Not moved in. Reason: move-in date is older than 14 days. This is the brief's example of showing why |
 | One day outside the window | Sam, 10/13 on day 1 | Not moved in |
 | Move-in date in the future | Erin on day 1 (10/28) | Not moved in on day 1, moved in on day 2 |
@@ -95,11 +97,11 @@ We treat the brief's mappings and rules as a contract. Bad data from Lakeside ne
 
 | Day | Today | Move-ins | Move-outs | Flags |
 |---|---|---|---|---|
-| 1 | 10/27 | Alice, Bob (5001), Frank (5005), Jack (5009), Grace (5006), Henry (5007), Liam (5010), Mia (5011). 8 total | None | Paul (unit 5099), Quinn (no unit), Ivy (Current with a past move-out), Sam (unknown customer type `co-applicant`) |
-| 2 | 10/28 | Dan (5003), Erin (5004), Nora (5011), Mia (5012). 4 total | Grace (5006), Henry (5007), Mia (5011). 3 total | Paul, Quinn, Ivy and Sam (unchanged, not logged again), Jack (Past, no move-out date) |
-| 3 | 10/29 | None | None | The run has no leases. The 9 residents still moved in are missing from the snapshot |
+| 1 | 10/27 | Alice, Bob (5001), Frank (5005), Jack (5009), Grace (5006), Henry (5007), Mia (5011). 7 total | None | Liam (lease left out: customers is not a list), Paul (unit 5099), Quinn (no unit), Ivy (Current with a past move-out), Sam (unknown customer type `co-applicant`) |
+| 2 | 10/28 | Dan (5003), Erin (5004), Nora (5011), Mia (5012). 4 total | Grace (5006), Henry (5007), Mia (5011). 3 total | Paul, Quinn and Sam (unchanged, not logged again), Jack (Past, no move-out date). Ivy is no longer flagged: her lease is Past now, so her status and date agree |
+| 3 | 10/29 | None | None | The run has no leases. The 8 residents still moved in are missing from the snapshot |
 
-Moved in after day 2 (should still be moved in after day 3): Alice, Bob, Frank, Jack, Liam, Dan, Erin, Nora, Mia (5012).
+Moved in after day 2 (should still be moved in after day 3): Alice, Bob, Frank, Jack, Dan, Erin, Nora, Mia (5012).
 
 ## Day 3
 
@@ -107,7 +109,7 @@ Day 3 lists every unit but has zero leases. Read literally as a full snapshot, i
 
 The rules already protect people here. A move-out needs an effective status that isn't Current and a move-out date of today or earlier. A resident who is missing from the snapshot has neither, so nobody can be moved out. The run should still make this visible instead of passing silently:
 - Upsert the units. They are present and unchanged.
-- Flag every resident who is moved in but missing from the snapshot. That's 9 people, so staff can see the export looks broken.
+- Flag every resident who is moved in but missing from the snapshot. That's 8 people, so staff can see the export looks broken.
 - Leave everything else alone.
 
 ## Decisions beyond the rules (agreed 2026-10-27)
@@ -116,3 +118,21 @@ The rules already protect people here. A move-out needs an effective status that
 - A snapshot older than the last run (for example day 1 after day 2): refuse it, because stale data could move people in or out. The refused run still appears in the runs list. Rerunning the same snapshot is allowed and changes nothing.
 - A Past resident from more than 14 days ago who is still moved in on RentLive: not in the data. Flag them for review rather than skipping them silently.
 - A date that isn't `MM/DD/YYYY` (for example `10/1/2026`, `2026-10-17` or `02/30/2026`): not in the data. Reject it rather than guess, and flag the customer. Reading it as "no date" would be unsafe, because a Current resident with a broken move-out date would look like they have none and could be moved in. (Agreed 2026-10-28.)
+- A list sent as a single object (L9010's `customers.customer` on day 1, the only lease that does it): leave just that lease out with a record exception, and accept the rest of the snapshot. It is one inconsistent record, not a systematic format, since every other single-customer lease sends a one-item list. Failing the whole run would stop the sync for everyone over one record. Liam is never moved in, which is the safe direction. (Agreed 2026-10-28.)
+- A lease whose interval in effect has a broken date: keep the lease without dates, with a record exception. Those dates are only shown in the UI, never used by the rules. (Agreed 2026-10-28.)
+- Later, not in v1: a way in the UI for staff to approve a flagged or left-out record by hand, such as moving Liam in.
+
+## Decisions made while building the rules (2026-10-28, for review)
+
+Each one takes the safe side: when the rules don't settle a case, nobody is moved, and the case is flagged so staff can see it.
+
+- Two kinds of exception, so the client can sort them. A **snapshot exception** (`SnapshotException`) means the structure breaks the contract, for example no `units` list, a unit or lease with no id, or a `generated_at` that isn't a timestamp: it is thrown, the whole run fails, and nobody is moved. A **record exception** (`RecordException`, in `snapshot.exceptions`) means one record's values break it: that record is left out, or kept without the broken part, and the rest of the snapshot is used. An exception doesn't have to stop the code.
+- Two copies of a unit that differ: an exception, not a choice. The unit is left out with a record exception, and so are its leases, since no copy can be trusted. Anyone already moved in there is flagged as missing from the snapshot and stays moved in. Identical copies (5003 on day 1) are one unit, with no record exception.
+- A person on several leases of one unit: their Current lease wins, whichever order the leases arrive in. If two are Current, the lease that started last wins.
+- A Current lease signer with no move-in date: not moved in, flagged. There is no date to check against the window.
+- A moved-in resident who is still Current but whose move-out date is today or earlier: left moved in, flagged. The move-out rule needs them not to be Current, so the status and the date contradict each other, like Ivy on day 1.
+- A moved-in resident who is not Current and whose move-out date is still in the future: left moved in, not flagged. The move-out rule is simply waiting for the date.
+- A move-in blocked because someone from a different lease is still moved in: not moved in, flagged, because it usually means the previous household's move-out is missing.
+- Lease signers from two different leases who could both move in on the same empty unit: neither is moved in, both are flagged. The rules allow it, but it would give two households the keys to one home.
+- A moved-in resident missing from the snapshot still counts as moved in for the different-lease rule, so a new lease can't move in over them.
+- Units RentLive has residents on are checked even if the snapshot no longer lists the unit, so a moved-in resident there is flagged as missing rather than forgotten.

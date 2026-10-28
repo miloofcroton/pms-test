@@ -5,42 +5,45 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { normalizeSnapshot } from '../lakeside/normalize';
 import type { NormalizedSnapshot } from '../lakeside/normalize';
 
-import { applyPlan, emptyState, residentKey, syncPlan } from './sync-plan';
-import type { Action, RentLiveState, SyncPlan } from './sync-plan';
+import { emptyState, residentKey } from './rentlive-state';
+import { applyPlan, syncPlan } from './sync-plan';
+import type { RentLiveState } from './rentlive-state';
+import type { Action } from './rules';
+import type { SyncPlan } from './sync-plan';
 
 // The acceptance test: the "expected outcomes per day" table in docs/mock-data-analysis.md, run against the real snapshots.
 // Keys are `unit/resident`.
 
-function snapshot(day: number): NormalizedSnapshot {
+const snapshot = (day: number): NormalizedSnapshot => {
   return normalizeSnapshot(JSON.parse(readFileSync(new URL(`../../../../data/day${day}.json`, import.meta.url), 'utf8')));
-}
+};
 
-function withAction(plan: SyncPlan, action: Action): Array<string> {
+const withAction = (plan: SyncPlan, action: Action): Array<string> => {
   return plan.decisions
     .filter((d) => d.action === action)
     .map((d) => residentKey(d.unitRemoteId, d.residentRemoteId))
     .sort();
-}
+};
 
-function flagged(plan: SyncPlan): Array<string> {
+const flagged = (plan: SyncPlan): Array<string> => {
   return plan.decisions
     .filter((d) => d.flagged)
     .map((d) => residentKey(d.unitRemoteId, d.residentRemoteId))
     .sort();
-}
+};
 
-function issueLeases(snapshot: NormalizedSnapshot): Array<string> {
-  return snapshot.issues
+const exceptionLeases = (snapshot: NormalizedSnapshot): Array<string> => {
+  return snapshot.exceptions
     .map((i) => i.leaseRemoteId)
     .sort();
-}
+};
 
-function movedIn(state: RentLiveState): Array<string> {
+const movedIn = (state: RentLiveState): Array<string> => {
   return [...state]
     .filter(([, resident]) => resident.movedIn)
     .map(([key]) => key)
     .sort();
-}
+};
 
 describe('days 1 to 3, in order', () => {
   // snapshots[n] and plans[n] are day n + 1.
@@ -63,7 +66,8 @@ describe('days 1 to 3, in order', () => {
       expect(plans[0].today).toBe('2026-10-27');
     });
 
-    it('moves in 8 residents', () => {
+    // Liam is not here: his lease sends its customers as an object, not a list, so it is left out.
+    it('moves in 7 residents', () => {
       expect(withAction(plans[0], 'move_in')).toEqual([
         '5001/3001', // Alice
         '5001/3002', // Bob
@@ -71,7 +75,6 @@ describe('days 1 to 3, in order', () => {
         '5006/3009', // Grace, moves out tomorrow
         '5007/3010', // Henry
         '5009/3013', // Jack
-        '5010/3015', // Liam
         '5011/3016', // Mia
       ]);
     });
@@ -87,8 +90,9 @@ describe('days 1 to 3, in order', () => {
       ]);
     });
 
-    it('reports the leases for Paul and Quinn', () => {
-      expect(issueLeases(snapshots[0])).toEqual([
+    it('reports the leases for Liam, Paul and Quinn', () => {
+      expect(exceptionLeases(snapshots[0])).toEqual([
+        '9010', // Liam, customers is an object, not a list
         '9015', // Paul, unit 5099 isn't in the snapshot
         '9017', // Quinn, no unit
       ]);
@@ -140,13 +144,12 @@ describe('days 1 to 3, in order', () => {
     it('flags Jack instead of moving him out', () => {
       expect(flagged(plans[1])).toEqual([
         '5007/3011', // Sam
-        '5008/3012', // Ivy
         '5009/3013', // Jack, Past with no move-out date
       ]);
     });
 
     it('still reports the leases for Paul and Quinn', () => {
-      expect(issueLeases(snapshots[1])).toEqual(['9015', '9017']);
+      expect(exceptionLeases(snapshots[1])).toEqual(['9015', '9017']);
     });
   });
 
@@ -160,7 +163,7 @@ describe('days 1 to 3, in order', () => {
       expect(flagged(plans[2])).toEqual(movedIn(states[2]));
     });
 
-    it('leaves the 9 residents moved in after day 2', () => {
+    it('leaves the 8 residents moved in after day 2', () => {
       expect(movedIn(states[3])).toEqual([
         '5001/3001', // Alice
         '5001/3002', // Bob
@@ -168,7 +171,6 @@ describe('days 1 to 3, in order', () => {
         '5004/3007', // Erin
         '5005/3008', // Frank
         '5009/3013', // Jack
-        '5010/3015', // Liam
         '5011/3021', // Nora
         '5012/3016', // Mia
       ]);
