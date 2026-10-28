@@ -19,6 +19,11 @@ description = "Build and start all services"
 run = "docker compose -f operations/docker-compose.yml down"
 description = "Stop all services"
 
+[tasks."app:reset"]
+depends = ["db:reset"]
+run = "docker compose -f operations/docker-compose.yml restart api"
+description = "Wipe the database and restart the api, which applies the migrations on start"
+
 # DB operations
 [tasks."db:up"]
 run = "docker compose -f operations/docker-compose.yml up -d --wait db"
