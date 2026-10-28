@@ -56,6 +56,33 @@ export type NormalizedSnapshot = {
   issues: Array<Issue>;
 };
 
+/**
+ * Turns a Lakeside `MM/DD/YYYY` date into ISO `YYYY-MM-DD`.
+ * An empty string, null or a missing field means no date.
+ * Anything else throws, because guessing at a broken date could move someone in or out on the wrong day.
+ */
+export function parseLakesideDate(value: unknown): string | null {
+  if (value === '' || value === null || value === undefined) {
+    return null;
+  }
+
+  const match = typeof value === 'string' ? LAKESIDE_DATE.exec(value) : null;
+  if (!match || !isRealDay(Number(match[3]), Number(match[1]), Number(match[2]))) {
+    throw new Error(`Expected a Lakeside date (MM/DD/YYYY), got ${JSON.stringify(value)}`);
+  }
+
+  const [, month, day, year] = match;
+  return `${year}-${month}-${day}`;
+}
+
+const LAKESIDE_DATE = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+
+function isRealDay(year: number, month: number, day: number): boolean {
+  // Day 0 of the next month is the last day of this one, so this counts leap years for us.
+  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  return month >= 1 && month <= 12 && day >= 1 && day <= daysInMonth;
+}
+
 export function normalizeSnapshot(raw: unknown): NormalizedSnapshot {
   throw new Error('Not implemented');
 }

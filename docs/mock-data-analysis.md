@@ -115,3 +115,4 @@ The rules already protect people here. A move-out needs an effective status that
 - Raw-only status change (5015 `null` to `D`): log it, because the UI shows the raw code.
 - A snapshot older than the last run (for example day 1 after day 2): refuse it, because stale data could move people in or out. The refused run still appears in the runs list. Rerunning the same snapshot is allowed and changes nothing.
 - A Past resident from more than 14 days ago who is still moved in on RentLive: not in the data. Flag them for review rather than skipping them silently.
+- A date that isn't `MM/DD/YYYY` (for example `10/1/2026`, `2026-10-17` or `02/30/2026`): not in the data. Reject it rather than guess, and flag the customer. Reading it as "no date" would be unsafe, because a Current resident with a broken move-out date would look like they have none and could be moved in. (Agreed 2026-10-28.)
