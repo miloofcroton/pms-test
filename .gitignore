@@ -8,6 +8,10 @@ dist/
 .dist/
 build/
 .build/
+npm-debug.*
+
+# react
+.react-router/
 
 # nitro
 .nitro/
@@ -15,16 +19,9 @@ build/
 .data/
 .cache/
 
-# react router
-.react-router/
-
-# env
+# operations
 .env
-
-# debug
-npm-debug.*
-yarn-debug.*
-yarn-error.*
 
 # claude
 .claude/settings.local.json
+.notes
