@@ -1,6 +1,6 @@
 # Notes
 
-The sync app syncs the Lakeside PMS into the RentLive app. These notes cover what the instructions ask for. Every case in the data, and the expected result for each day, is in [docs/mock-data-analysis.md](docs/mock-data-analysis.md), which is where the tests come from.
+The sync app syncs the Lakeside PMS into the RentLive app. These notes cover what the instructions ask for. Every case in the data, and the expected result for each day, is in [MOCK-DATA-ANALYSIS.md](MOCK-DATA-ANALYSIS.md), which is where the tests come from.
 
 ## How a run works
 
@@ -10,7 +10,7 @@ The sync app syncs the Lakeside PMS into the RentLive app. These notes cover wha
 4. **Apply.** The runner upserts units and residents through the RentLive contract, then makes every move-out, then every move-in.
 5. **Record.** It saves the run with its counts, the latest decision per resident, the run's exceptions, and a change-log entry for each thing that changed.
 
-`mise run sync data/day1.json` runs one snapshot from the command line, and the UI's buttons call `POST /runs`, which runs the same code.
+The command line and the UI's run buttons run the same code. The [README](README.md) says how to run both.
 
 ## Domain model
 

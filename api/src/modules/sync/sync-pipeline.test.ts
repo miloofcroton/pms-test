@@ -11,7 +11,7 @@ import type { RentLiveState } from '~/modules/sync/rentlive-state';
 import type { Action } from '~/modules/sync/rules';
 import type { SyncPlan } from '~/modules/sync/sync-pipeline';
 
-// The acceptance test: the "expected outcomes per day" table in docs/mock-data-analysis.md, run against the real snapshots.
+// The acceptance test: the "expected outcomes per day" table in MOCK-DATA-ANALYSIS.md, run against the real snapshots.
 // Keys are `unit/resident`.
 
 const snapshot = (day: number): NormalizedSnapshot => {

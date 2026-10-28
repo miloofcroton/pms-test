@@ -1,9 +1,9 @@
 # Sync app
 
-The sync app syncs the Lakeside PMS into the RentLive app (a smart home and access platform for apartment communities), with a small web UI for staff. The instructions are in [docs/instructions.md](docs/instructions.md) and the Lakeside snapshots are in [data/](data/).
+The sync app syncs the Lakeside PMS into the RentLive app (a smart home and access platform for apartment communities), with a small web UI for staff. The instructions are in [INSTRUCTIONS.md](INSTRUCTIONS.md) and the Lakeside snapshots are in [data/](data/).
 
 - [NOTES.md](NOTES.md): the domain model, where the UI reads from, the surprising data, every decision beyond the rules, production at scale, and what was skipped.
-- [docs/mock-data-analysis.md](docs/mock-data-analysis.md): every case in the data and the expected result of each day, which the tests are written from.
+- [MOCK-DATA-ANALYSIS.md](MOCK-DATA-ANALYSIS.md): every case in the data and the expected result of each day, which the tests are written from.
 
 ## Quick start
 

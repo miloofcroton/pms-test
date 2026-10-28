@@ -3,7 +3,7 @@
 ## Notes
 
 - Save plans, findings and anything else worth keeping across sessions to `.notes/`, not to Claude's memory. The user reads these files too. Start each session by reading `.notes/plan.md`.
-- Decisions about the data and the rules go in `docs/mock-data-analysis.md`, which is committed.
+- Each case in the data, and the expected result of each day, goes in `MOCK-DATA-ANALYSIS.md`. Each decision the instructions' rules don't settle goes in `NOTES.md`, under "Decisions beyond the rules". Say each thing in one place and link to it from the others. `INSTRUCTIONS.md` is the original brief and is never edited.
 
 ## Git
 
@@ -13,7 +13,7 @@
 
 ## Testing
 
-- Test-driven: write the failing tests first, show them failing, then make them pass. The cases come from `docs/mock-data-analysis.md`, so add a row there for any new case.
+- Test-driven: write the failing tests first, show them failing, then make them pass. The cases come from `MOCK-DATA-ANALYSIS.md`, so add a row there for any new case.
 - Unit tests (`*.test.ts`, `mise run test:unit`) cover pure code and need no database. Integration tests (`*.integration.test.ts`, `mise run test:integration`) run against the local postgres.
 - Integration tests have their own database, `sync_app_test`, next to the app's `sync_app`. `api/vitest.integration.setup.ts` migrates and empties it before every test file, so a file starts from nothing and needs no setup or cleanup of its own. Use the real data as it is: property `100` and the snapshots in `data/`.
 - Every error kind and every exception kind has a test at the layer that produces it, and a runner test that checks how it is stored.
