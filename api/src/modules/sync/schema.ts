@@ -2,8 +2,10 @@ import { index, integer, jsonb, pgSchema, primaryKey, serial, text, timestamp } 
 
 import { snapshots } from '../lakeside/schema';
 
+import type { ChangeKind } from './change-log';
 import type { RunError } from './errors';
 import type { ExceptionKind, SyncException } from './exceptions';
+import type { Action, Reason } from './rules';
 
 // What the sync app did: each run, what it decided for each resident, what changed, and every exception it found.
 export const sync = pgSchema('sync');
@@ -62,8 +64,12 @@ export const decisions = sync.table('decisions', {
   propertyId: text().notNull(),
   unitRemoteId: text().notNull(),
   residentRemoteId: text().notNull(),
-  action: text().notNull(),
-  reason: text().notNull(),
+  action: text()
+    .$type<Action>()
+    .notNull(),
+  reason: text()
+    .$type<Reason>()
+    .notNull(),
   runId: integer()
     .notNull()
     .references(() => runs.id),
@@ -88,7 +94,9 @@ export const changeLog = sync.table('change_log', {
   propertyId: text().notNull(),
   unitRemoteId: text(),
   residentRemoteId: text(),
-  kind: text().notNull(),
+  kind: text()
+    .$type<ChangeKind>()
+    .notNull(),
   details: jsonb()
     .$type<Record<string, unknown>>()
     .notNull()
