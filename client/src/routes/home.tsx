@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { styled } from '@linaria/react';
+import { css } from '@linaria/core';
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4444';
 
-const Page = styled.main`
+const page = css`
   padding: 2rem;
 `;
 
@@ -25,10 +25,10 @@ export default function Home() {
   }, []);
 
   return (
-    <Page>
+    <main className={page}>
       <h1>RentLive PMS</h1>
       {error && <p>API unreachable: {error}</p>}
       {health && <pre>{JSON.stringify(health, null, 2)}</pre>}
-    </Page>
+    </main>
   );
 }
