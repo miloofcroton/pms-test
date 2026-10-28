@@ -30,6 +30,7 @@ describe('migrations', () => {
       'rentlive.units',
       'sync.change_log',
       'sync.decisions',
+      'sync.exceptions',
       'sync.runs',
     ]);
   });

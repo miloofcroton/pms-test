@@ -1,6 +1,8 @@
-import { integer, jsonb, pgSchema, primaryKey, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import { index, integer, jsonb, pgSchema, primaryKey, serial, text, timestamp } from 'drizzle-orm/pg-core';
 
 import { snapshots } from '../lakeside/schema';
+
+import type { ExceptionKind, SyncException } from './exceptions';
 
 // What the sync app did: each run, what it decided for each resident, and what changed.
 export const sync = pgSchema('sync');
@@ -57,3 +59,33 @@ export const changeLog = sync.table('change_log', {
     .notNull()
     .defaultNow(),
 });
+
+// Every exception each run found: snapshot (the run failed), record (data left out) and review (a decision was flagged).
+// Recorded again on every run, so the latest run's rows are the current list. See `exceptions.ts`.
+export const exceptions = sync.table('exceptions', {
+  id: serial().primaryKey(),
+  runId: integer()
+    .notNull()
+    .references(() => runs.id),
+  // Null when a snapshot exception left the property unreadable.
+  propertyId: text(),
+  kind: text()
+    .$type<ExceptionKind>()
+    .notNull(),
+  reason: text()
+    .$type<SyncException['reason']>()
+    .notNull(),
+  unitRemoteId: text(),
+  leaseRemoteId: text(),
+  residentRemoteId: text(),
+  details: jsonb()
+    .$type<Record<string, unknown>>()
+    .notNull()
+    .default({}),
+  recordedAt: timestamp({ withTimezone: true })
+    .notNull()
+    .defaultNow(),
+}, (t) => [
+  index().on(t.runId, t.kind),
+  index().on(t.propertyId, t.unitRemoteId, t.residentRemoteId),
+]);
