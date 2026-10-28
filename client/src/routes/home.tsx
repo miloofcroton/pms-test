@@ -26,7 +26,7 @@ export default function Home() {
 
   return (
     <main className={page}>
-      <h1>RentLive PMS</h1>
+      <h1>Sync app</h1>
       {error && <p>API unreachable: {error}</p>}
       {health && <pre>{JSON.stringify(health, null, 2)}</pre>}
     </main>

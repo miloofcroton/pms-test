@@ -1,6 +1,6 @@
-# RentLive's Property Management System
+# Sync app
 
-A sync from the Lakeside PMS into RentLive, with a small web UI. The brief is in [docs/instructions.md](docs/instructions.md) and the Lakeside snapshots are in [data/](data/).
+The sync app syncs the Lakeside PMS into the RentLive app (a smart home and access platform for apartment communities), with a small web UI for staff. The brief is in [docs/instructions.md](docs/instructions.md) and the Lakeside snapshots are in [data/](data/).
 
 ## Quick start
 

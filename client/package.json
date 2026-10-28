@@ -1,5 +1,5 @@
 {
-  "name": "pms-client",
+  "name": "sync-client",
   "private": true,
   "type": "module",
   "devDependencies": {

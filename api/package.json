@@ -1,5 +1,5 @@
 {
-  "name": "pms-api",
+  "name": "sync-api",
   "private": true,
   "type": "module",
   "devDependencies": {

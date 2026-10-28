@@ -1,6 +1,7 @@
 import { boolean, pgSchema, primaryKey, text } from 'drizzle-orm/pg-core';
 
-// What RentLive stores. Only the RentLive implementation in src/rentlive touches these tables.
+// What RentLive stores.
+// Only the Postgres RentLive implementation in this folder touches these tables.
 // In production this schema is the real RentLive, which we don't own.
 export const rentlive = pgSchema('rentlive');
 
