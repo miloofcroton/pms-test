@@ -1,3 +1,18 @@
-interviewer/
-.claude/
+# macOS
 .DS_Store
+*.pem
+
+# node
+node_modules/
+dist/
+.dist/
+build/
+.build/
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# claude
+.claude/settings.local.json

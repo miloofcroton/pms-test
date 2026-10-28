@@ -1,0 +1,8 @@
+// https://nitro.unjs.io/guide/typescript
+{
+  "extends": ["./.build/types/tsconfig.json"],
+  "compilerOptions": {
+    // nitropack and other deps ship broken .d.ts files for optional peer dependencies
+    "skipLibCheck": true
+  }
+}

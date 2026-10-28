@@ -2,7 +2,7 @@
   "meta": {
     "pms": "Lakeside",
     "api_version": "2.3",
-    "generated_at": "2026-10-30T06:30:00Z",
+    "generated_at": "2026-10-29T06:30:00Z",
     "snapshot_type": "full"
   },
   "property": {
@@ -136,8 +136,8 @@
           {
             "id": 70011,
             "leaseIntervalType": "Lease",
-            "startDate": "10/18/2026",
-            "endDate": "10/17/2027"
+            "startDate": "10/17/2026",
+            "endDate": "10/16/2027"
           }
         ]
       },
@@ -149,8 +149,8 @@
             "leaseCustomerStatus": null,
             "firstName": "Alice",
             "lastName": "Nguyen",
-            "moveInDate": "10/18/2026",
-            "moveOutDate": "10/27/2026",
+            "moveInDate": "10/17/2026",
+            "moveOutDate": "10/26/2026",
             "addresses": {
               "address": {
                 "email": "alice.nguyen@example.com"
@@ -166,8 +166,8 @@
             "leaseCustomerStatus": null,
             "firstName": "Gary",
             "lastName": "Nguyen",
-            "moveInDate": "10/18/2026",
-            "moveOutDate": "10/27/2026",
+            "moveInDate": "10/17/2026",
+            "moveOutDate": "10/26/2026",
             "addresses": {
               "address": {
                 "email": "gary.nguyen@example.com"
@@ -183,8 +183,8 @@
             "leaseCustomerStatus": null,
             "firstName": "Bob",
             "lastName": "Lee",
-            "moveInDate": "10/18/2026",
-            "moveOutDate": "10/27/2026",
+            "moveInDate": "10/17/2026",
+            "moveOutDate": "10/26/2026",
             "addresses": {
               "address": {
                 "email": "bob.lee@example.com"
@@ -208,8 +208,8 @@
           {
             "id": 70021,
             "leaseIntervalType": "Lease",
-            "startDate": "09/02/2026",
-            "endDate": "09/01/2027"
+            "startDate": "09/01/2026",
+            "endDate": "08/31/2027"
           }
         ]
       },
@@ -221,7 +221,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Carol",
             "lastName": "Mendez",
-            "moveInDate": "09/02/2026",
+            "moveInDate": "09/01/2026",
             "moveOutDate": "",
             "addresses": {
               "address": {
@@ -246,8 +246,8 @@
           {
             "id": 70161,
             "leaseIntervalType": "Lease",
-            "startDate": "10/27/2026",
-            "endDate": "10/26/2027"
+            "startDate": "10/26/2026",
+            "endDate": "10/25/2027"
           }
         ]
       },
@@ -259,7 +259,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Owen",
             "lastName": "Park",
-            "moveInDate": "10/23/2026",
+            "moveInDate": "10/22/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -284,8 +284,8 @@
           {
             "id": 70051,
             "leaseIntervalType": "Lease",
-            "startDate": "10/23/2026",
-            "endDate": "12/26/2026"
+            "startDate": "10/22/2026",
+            "endDate": "12/25/2026"
           }
         ]
       },
@@ -297,8 +297,8 @@
             "leaseCustomerStatus": null,
             "firstName": "Frank",
             "lastName": "Osei",
-            "moveInDate": "10/23/2026",
-            "moveOutDate": "12/26/2026",
+            "moveInDate": "10/22/2026",
+            "moveOutDate": "12/25/2026",
             "addresses": {
               "address": {
                 "email": "frank.osei@example.com"
@@ -322,8 +322,8 @@
           {
             "id": 70091,
             "leaseIntervalType": "Lease",
-            "startDate": "10/22/2026",
-            "endDate": "10/21/2027"
+            "startDate": "10/21/2026",
+            "endDate": "10/20/2027"
           }
         ]
       },
@@ -335,7 +335,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Jack",
             "lastName": "Rossi",
-            "moveInDate": "10/22/2026",
+            "moveInDate": "10/21/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -352,8 +352,8 @@
             "leaseCustomerStatus": "Past",
             "firstName": "Kim",
             "lastName": "Sato",
-            "moveInDate": "10/22/2026",
-            "moveOutDate": "10/24/2026",
+            "moveInDate": "10/21/2026",
+            "moveOutDate": "10/23/2026",
             "addresses": {
               "address": {
                 "email": "kim.sato@example.com"
@@ -377,8 +377,8 @@
           {
             "id": 70151,
             "leaseIntervalType": "Lease",
-            "startDate": "10/23/2026",
-            "endDate": "10/22/2027"
+            "startDate": "10/22/2026",
+            "endDate": "10/21/2027"
           }
         ]
       },
@@ -390,7 +390,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Paul",
             "lastName": "Quint",
-            "moveInDate": "10/23/2026",
+            "moveInDate": "10/22/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -415,8 +415,8 @@
           {
             "id": 70171,
             "leaseIntervalType": "Lease",
-            "startDate": "10/23/2026",
-            "endDate": "10/22/2027"
+            "startDate": "10/22/2026",
+            "endDate": "10/21/2027"
           }
         ]
       },
@@ -428,7 +428,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Quinn",
             "lastName": "Reyes",
-            "moveInDate": "10/23/2026",
+            "moveInDate": "10/22/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -451,8 +451,8 @@
           {
             "id": 70201,
             "leaseIntervalType": "Lease",
-            "startDate": "08/02/2025",
-            "endDate": "08/01/2026"
+            "startDate": "08/01/2025",
+            "endDate": "07/31/2026"
           }
         ]
       },
@@ -464,8 +464,8 @@
             "leaseCustomerStatus": null,
             "firstName": "Rita",
             "lastName": "Gomez",
-            "moveInDate": "08/02/2025",
-            "moveOutDate": "08/02/2026",
+            "moveInDate": "08/01/2025",
+            "moveOutDate": "08/01/2026",
             "addresses": {
               "address": {
                 "email": "rita.gomez@example.com"
@@ -481,8 +481,8 @@
             "leaseCustomerStatus": null,
             "firstName": "Victor",
             "lastName": "Gomez",
-            "moveInDate": "08/02/2025",
-            "moveOutDate": "08/02/2026",
+            "moveInDate": "08/01/2025",
+            "moveOutDate": "08/01/2026",
             "addresses": {
               "address": {
                 "email": "victor.gomez@example.com"
@@ -506,8 +506,8 @@
           {
             "id": 70211,
             "leaseIntervalType": "Lease",
-            "startDate": "10/14/2025",
-            "endDate": "10/13/2026"
+            "startDate": "10/13/2025",
+            "endDate": "10/12/2026"
           }
         ]
       },
@@ -519,8 +519,8 @@
             "leaseCustomerStatus": null,
             "firstName": "Wendy",
             "lastName": "Shah",
-            "moveInDate": "10/14/2025",
-            "moveOutDate": "10/13/2026",
+            "moveInDate": "10/13/2025",
+            "moveOutDate": "10/12/2026",
             "addresses": {
               "address": {
                 "email": "wendy.shah@example.com"
@@ -544,8 +544,8 @@
           {
             "id": 70031,
             "leaseIntervalType": "Lease",
-            "startDate": "10/29/2026",
-            "endDate": "10/28/2027"
+            "startDate": "10/28/2026",
+            "endDate": "10/27/2027"
           }
         ]
       },
@@ -557,7 +557,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Dan",
             "lastName": "Ito",
-            "moveInDate": "10/29/2026",
+            "moveInDate": "10/28/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -582,8 +582,8 @@
           {
             "id": 70041,
             "leaseIntervalType": "Lease",
-            "startDate": "10/29/2026",
-            "endDate": "10/28/2027"
+            "startDate": "10/28/2026",
+            "endDate": "10/27/2027"
           }
         ]
       },
@@ -595,7 +595,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Erin",
             "lastName": "Walsh",
-            "moveInDate": "10/29/2026",
+            "moveInDate": "10/28/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -620,8 +620,8 @@
           {
             "id": 70061,
             "leaseIntervalType": "Lease",
-            "startDate": "10/16/2026",
-            "endDate": "10/29/2026"
+            "startDate": "10/15/2026",
+            "endDate": "10/28/2026"
           }
         ]
       },
@@ -633,8 +633,8 @@
             "leaseCustomerStatus": null,
             "firstName": "Grace",
             "lastName": "Hall",
-            "moveInDate": "10/16/2026",
-            "moveOutDate": "10/29/2026",
+            "moveInDate": "10/15/2026",
+            "moveOutDate": "10/28/2026",
             "addresses": {
               "address": {
                 "email": "grace.hall@example.com"
@@ -658,8 +658,8 @@
           {
             "id": 70071,
             "leaseIntervalType": "Lease",
-            "startDate": "10/14/2026",
-            "endDate": "10/13/2027"
+            "startDate": "10/13/2026",
+            "endDate": "10/12/2027"
           }
         ]
       },
@@ -671,8 +671,8 @@
             "leaseCustomerStatus": "Past",
             "firstName": "Henry",
             "lastName": "Diaz",
-            "moveInDate": "10/25/2026",
-            "moveOutDate": "10/27/2026",
+            "moveInDate": "10/24/2026",
+            "moveOutDate": "10/26/2026",
             "addresses": {
               "address": {
                 "email": "henry.diaz@example.com"
@@ -688,7 +688,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Sam",
             "lastName": "Diaz",
-            "moveInDate": "10/14/2026",
+            "moveInDate": "10/13/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -713,8 +713,8 @@
           {
             "id": 70081,
             "leaseIntervalType": "Lease",
-            "startDate": "10/20/2026",
-            "endDate": "10/26/2026"
+            "startDate": "10/19/2026",
+            "endDate": "10/25/2026"
           }
         ]
       },
@@ -726,8 +726,8 @@
             "leaseCustomerStatus": null,
             "firstName": "Ivy",
             "lastName": "Chen",
-            "moveInDate": "10/20/2026",
-            "moveOutDate": "10/26/2026",
+            "moveInDate": "10/19/2026",
+            "moveOutDate": "10/25/2026",
             "addresses": {
               "address": {
                 "email": "ivy.chen@example.com"
@@ -751,8 +751,8 @@
           {
             "id": 71191,
             "leaseIntervalType": "Lease",
-            "startDate": "10/29/2026",
-            "endDate": "10/28/2027"
+            "startDate": "10/28/2026",
+            "endDate": "10/27/2027"
           }
         ]
       },
@@ -764,7 +764,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Nora",
             "lastName": "Fitz",
-            "moveInDate": "10/29/2026",
+            "moveInDate": "10/28/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -789,8 +789,8 @@
           {
             "id": 70111,
             "leaseIntervalType": "Lease",
-            "startDate": "10/17/2026",
-            "endDate": "10/16/2027"
+            "startDate": "10/16/2026",
+            "endDate": "10/15/2027"
           }
         ]
       },
@@ -802,8 +802,8 @@
             "leaseCustomerStatus": null,
             "firstName": "Mia",
             "lastName": "Kowalski",
-            "moveInDate": "10/17/2026",
-            "moveOutDate": "10/28/2026",
+            "moveInDate": "10/16/2026",
+            "moveOutDate": "10/27/2026",
             "addresses": {
               "address": {
                 "email": "mia.kowalski@example.com"
@@ -827,14 +827,14 @@
           {
             "id": 71008,
             "leaseIntervalType": "Renewal Offer",
-            "startDate": "10/18/2027",
-            "endDate": "10/16/2028"
+            "startDate": "10/17/2027",
+            "endDate": "10/15/2028"
           },
           {
             "id": 71010,
             "leaseIntervalType": "Lease",
-            "startDate": "10/28/2026",
-            "endDate": "10/17/2027"
+            "startDate": "10/27/2026",
+            "endDate": "10/16/2027"
           }
         ]
       },
@@ -846,7 +846,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Alice",
             "lastName": "Nguyen",
-            "moveInDate": "10/18/2026",
+            "moveInDate": "10/17/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -863,7 +863,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Bob",
             "lastName": "Lee",
-            "moveInDate": "10/18/2026",
+            "moveInDate": "10/17/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -880,7 +880,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Gary",
             "lastName": "Nguyen",
-            "moveInDate": "10/28/2026",
+            "moveInDate": "10/27/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -897,7 +897,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Uma",
             "lastName": "Lee",
-            "moveInDate": "10/28/2026",
+            "moveInDate": "10/27/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -922,8 +922,8 @@
           {
             "id": 71121,
             "leaseIntervalType": "Lease",
-            "startDate": "10/28/2026",
-            "endDate": "10/27/2027"
+            "startDate": "10/27/2026",
+            "endDate": "10/26/2027"
           }
         ]
       },
@@ -935,7 +935,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Mia",
             "lastName": "Kowalski",
-            "moveInDate": "10/28/2026",
+            "moveInDate": "10/27/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {
@@ -960,8 +960,8 @@
           {
             "id": 71181,
             "leaseIntervalType": "Lease",
-            "startDate": "11/10/2026",
-            "endDate": "11/09/2027"
+            "startDate": "11/09/2026",
+            "endDate": "11/08/2027"
           }
         ]
       },
@@ -973,7 +973,7 @@
             "leaseCustomerStatus": null,
             "firstName": "Tina",
             "lastName": "Vance",
-            "moveInDate": "11/10/2026",
+            "moveInDate": "11/09/2026",
             "moveOutDate": null,
             "addresses": {
               "address": {

@@ -1,0 +1,52 @@
+# Tool versioning
+[tools]
+node = "22.23.1"
+npm = "10.9.2"
+docker-cli = "29.1.5"
+docker-compose = "5.0.1"
+
+# Setup
+[tasks.install]
+run = ["npm --prefix api install", "npm --prefix client install"]
+description = "Install api and client dependencies"
+
+# App operations
+[tasks."app:up"]
+run = "docker compose -f operations/docker-compose.yml up -d --build"
+description = "Build and start all services"
+
+[tasks."app:down"]
+run = "docker compose -f operations/docker-compose.yml down"
+description = "Stop all services"
+
+# DB operations
+[tasks."db:up"]
+run = "docker compose -f operations/docker-compose.yml up -d --wait db"
+description = "Start postgres only"
+[tasks."db:down"]
+run = "docker compose -f operations/docker-compose.yml stop db"
+description = "Stop postgres only"
+
+# API operations
+[tasks."api:dev"]
+run = "npm --prefix api run dev"
+description = "Run the api with hot reload on :4444"
+
+# Client operations
+[tasks."client:dev"]
+run = "npm --prefix client run dev"
+description = "Run the client with hot reload on :8080"
+
+# Testing
+[tasks."test:unit"]
+run = ["npm --prefix api run test:unit", "npm --prefix client test"]
+description = "Run api and client unit tests (no database needed)"
+
+[tasks."test:integration"]
+depends = ["db:up"]
+run = "npm --prefix api run test:integration"
+description = "Start postgres, then run the api integration tests"
+
+[tasks."test:types"]
+run = ["npm --prefix api run typecheck", "npm --prefix client run typecheck"]
+description = "Typecheck api and client"
