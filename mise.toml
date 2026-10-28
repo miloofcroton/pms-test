@@ -26,6 +26,13 @@ description = "Start postgres only"
 [tasks."db:down"]
 run = "docker compose -f operations/docker-compose.yml stop db"
 description = "Stop postgres only"
+[tasks."db:reset"]
+run = [
+  "docker compose -f operations/docker-compose.yml rm -sfv db",
+  "docker volume rm -f sync-app_postgres_data",
+  "docker compose -f operations/docker-compose.yml up -d --wait db",
+]
+description = "Wipe postgres and start it empty"
 
 # API operations
 [tasks."api:dev"]

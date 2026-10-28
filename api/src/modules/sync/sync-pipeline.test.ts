@@ -5,6 +5,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { normalizeSnapshot } from '../lakeside/normalize';
 import type { NormalizedSnapshot } from '../lakeside/normalize';
 
+import { exceptionsOf } from './exceptions';
 import { emptyState, residentKey } from './rentlive-state';
 import { applyPlan, syncPlan } from './sync-pipeline';
 import type { RentLiveState } from './rentlive-state';
@@ -35,6 +36,16 @@ const flagged = (plan: SyncPlan): Array<string> => {
 const exceptionLeases = (snapshot: NormalizedSnapshot): Array<string> => {
   return snapshot.exceptions
     .map((i) => i.leaseRemoteId)
+    .sort();
+};
+
+// What the UI will list: `kind reason id`, where the id is `unit/resident`, or the lease for a lease left out.
+const exceptionList = (snapshot: NormalizedSnapshot, plan: SyncPlan): Array<string> => {
+  return exceptionsOf(snapshot, plan)
+    .map((exception) => {
+      const id = exception.residentRemoteId === null ? `lease ${exception.leaseRemoteId}` : residentKey(exception.unitRemoteId ?? '', exception.residentRemoteId);
+      return `${exception.kind} ${exception.reason} ${id}`;
+    })
     .sort();
 };
 
@@ -174,6 +185,31 @@ describe('days 1 to 3, in order', () => {
         '5011/3021', // Nora
         '5012/3016', // Mia
       ]);
+    });
+  });
+
+  describe('the exceptions each day records', () => {
+    it('day 1: three leases left out, and Sam and Ivy flagged', () => {
+      expect(exceptionList(snapshots[0], plans[0])).toEqual([
+        'data lease_customers_not_a_list lease 9010', // Liam
+        'data lease_unit_not_in_snapshot lease 9015', // Paul
+        'data lease_without_unit lease 9017', // Quinn
+        'review move_out_date_not_in_future 5008/3012', // Ivy
+        'review unknown_customer_type 5007/3011', // Sam
+      ]);
+    });
+
+    it('day 2: two leases left out, and Sam and Jack flagged', () => {
+      expect(exceptionList(snapshots[1], plans[1])).toEqual([
+        'data lease_unit_not_in_snapshot lease 9015', // Paul
+        'data lease_without_unit lease 9017', // Quinn
+        'review no_move_out_date 5009/3013', // Jack
+        'review unknown_customer_type 5007/3011', // Sam
+      ]);
+    });
+
+    it('day 3: everyone still moved in is missing from the snapshot', () => {
+      expect(exceptionList(snapshots[2], plans[2])).toEqual(movedIn(states[2]).map((key) => `review missing_from_snapshot ${key}`));
     });
   });
 
