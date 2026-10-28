@@ -1,6 +1,6 @@
 // The brief's mapping from a Lakeside `unitStatus` code to a RentLive unit status.
 
-export type UnitStatus = 'Occupied' | 'Vacant' | 'Model' | 'Common Area' | 'Down';
+import type { UnitStatus } from '../rentlive/contract';
 
 // A Map rather than an object, so a code like `toString` can't match something inherited.
 const STATUS_BY_CODE = new Map<string, UnitStatus>([
