@@ -5,7 +5,7 @@ import type { NormalizedSnapshot, RecordException } from '../lakeside/normalize'
 
 import { exceptionsOf, snapshotExceptionOf } from './exceptions';
 import type { Decision } from './rules';
-import type { SyncPlan } from './sync-plan';
+import type { SyncPlan } from './sync-pipeline';
 
 const snapshotWith = (exceptions: Array<RecordException>): NormalizedSnapshot => {
   return {

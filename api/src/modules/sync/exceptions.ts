@@ -1,7 +1,7 @@
 import type { NormalizedSnapshot, RecordExceptionReason, SnapshotException } from '../lakeside/normalize';
 
 import type { Reason } from './rules';
-import type { SyncPlan } from './sync-plan';
+import type { SyncPlan } from './sync-pipeline';
 
 // Every exception a run finds, of all three kinds, as rows for `sync.exceptions`.
 // `snapshot`: the structure broke the contract and the run failed.

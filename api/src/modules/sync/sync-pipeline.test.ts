@@ -6,10 +6,10 @@ import { normalizeSnapshot } from '../lakeside/normalize';
 import type { NormalizedSnapshot } from '../lakeside/normalize';
 
 import { emptyState, residentKey } from './rentlive-state';
-import { applyPlan, syncPlan } from './sync-plan';
+import { applyPlan, syncPlan } from './sync-pipeline';
 import type { RentLiveState } from './rentlive-state';
 import type { Action } from './rules';
-import type { SyncPlan } from './sync-plan';
+import type { SyncPlan } from './sync-pipeline';
 
 // The acceptance test: the "expected outcomes per day" table in docs/mock-data-analysis.md, run against the real snapshots.
 // Keys are `unit/resident`.
