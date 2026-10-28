@@ -2,20 +2,6 @@
   "name": "pms-api",
   "private": true,
   "type": "module",
-  "scripts": {
-    "build": "nitro build",
-    "dev": "PORT=4444 nitro dev",
-    "prepare": "nitro prepare",
-    "preview": "node .output/server/index.mjs",
-    "test:unit": "vitest run -c vitest.unit.config.ts",
-    "test:integration": "vitest run -c vitest.integration.config.ts",
-    "typecheck": "tsc --noEmit",
-    "db:generate": "drizzle-kit generate"
-  },
-  "dependencies": {
-    "drizzle-orm": "^0.45.4",
-    "pg": "^8.13.1"
-  },
   "devDependencies": {
     "@types/node": "22.13.0",
     "@types/pg": "^8.11.10",
@@ -23,5 +9,19 @@
     "nitropack": "2.11.6",
     "typescript": "^5.7.2",
     "vitest": "^3.0.8"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.4",
+    "pg": "^8.13.1"
+  },
+  "scripts": {
+    "build": "nitro build",
+    "db:generate": "drizzle-kit generate",
+    "dev": "PORT=4444 nitro dev",
+    "prepare": "nitro prepare",
+    "preview": "node .output/server/index.mjs",
+    "test:integration": "vitest run -c vitest.integration.config.ts",
+    "test:unit": "vitest run -c vitest.unit.config.ts",
+    "typecheck": "tsc --noEmit"
   }
 }

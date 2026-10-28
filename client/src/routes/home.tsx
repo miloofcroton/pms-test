@@ -1,5 +1,5 @@
-import { styled } from '@linaria/react';
 import { useEffect, useState } from 'react';
+import { styled } from '@linaria/react';
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4444';
 
@@ -7,7 +7,11 @@ const Page = styled.main`
   padding: 2rem;
 `;
 
-type Health = { status: string; db: string; timestamp: string };
+type Health = {
+  status: string;
+  db: string;
+  timestamp: string
+};
 
 export default function Home() {
   const [health, setHealth] = useState<Health | null>(null);

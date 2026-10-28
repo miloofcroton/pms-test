@@ -7,8 +7,8 @@ docker-compose = "5.0.1"
 
 # Setup
 [tasks.install]
-run = ["npm --prefix api install", "npm --prefix client install"]
-description = "Install api and client dependencies"
+run = ["npm install", "npm --prefix api install", "npm --prefix client install"]
+description = "Install root, api and client dependencies"
 
 # App operations
 [tasks."app:up"]
@@ -50,3 +50,15 @@ description = "Start postgres, then run the api integration tests"
 [tasks."test:types"]
 run = ["npm --prefix api run typecheck", "npm --prefix client run typecheck"]
 description = "Typecheck api and client"
+
+[tasks."test:lint"]
+run = "npm run lint"
+description = "Lint the whole repo"
+
+[tasks."test:smoke"]
+depends = ["test:lint", "test:types"]
+description = "Fast checks: lint and types"
+
+[tasks."lint:fix"]
+run = "npm run lint:fix"
+description = "Fix lint errors where possible"

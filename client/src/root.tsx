@@ -1,5 +1,5 @@
-import { css } from '@linaria/core';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import { css } from '@linaria/core';
 
 export const globals = css`
   :global() {
