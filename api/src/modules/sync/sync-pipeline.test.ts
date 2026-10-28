@@ -35,7 +35,7 @@ const flagged = (plan: SyncPlan): Array<string> => {
 
 const exceptionLeases = (snapshot: NormalizedSnapshot): Array<string> => {
   return snapshot.exceptions
-    .map((i) => i.leaseRemoteId)
+    .flatMap((exception) => exception.leaseRemoteId === null ? [] : [exception.leaseRemoteId])
     .sort();
 };
 

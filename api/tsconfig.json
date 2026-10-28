@@ -2,6 +2,8 @@
 {
   "extends": ["./.build/types/tsconfig.json"],
   "compilerOptions": {
+    // Nitro's generated config turns strict off, which also turns off null checks and narrowing on `ok` results.
+    "strict": true,
     // nitropack and other deps ship broken .d.ts files for optional peer dependencies
     "skipLibCheck": true
   }
