@@ -1,0 +1,1 @@
+ALTER TABLE "rentlive"."residents" ALTER COLUMN "lease_remote_id" SET NOT NULL;

@@ -1,5 +1,7 @@
 import { boolean, pgSchema, primaryKey, text } from 'drizzle-orm/pg-core';
 
+import type { UnitStatus } from './contract';
+
 // What RentLive stores.
 // Only the Postgres RentLive mock touches these tables.
 // In production this schema is the real RentLive, which we don't own.
@@ -11,7 +13,9 @@ export const rentliveUnits = rentlive.table('units', {
   unitNumber: text().notNull(),
   buildingName: text(),
   floorplanName: text(),
-  status: text().notNull(),
+  status: text()
+    .$type<UnitStatus>()
+    .notNull(),
 }, (t) => [
   primaryKey({
     columns: [
@@ -26,7 +30,7 @@ export const rentliveResidents = rentlive.table('residents', {
   propertyId: text().notNull(),
   unitRemoteId: text().notNull(),
   remoteId: text().notNull(),
-  leaseRemoteId: text(),
+  leaseRemoteId: text().notNull(),
   firstName: text(),
   lastName: text(),
   email: text(),
