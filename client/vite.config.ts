@@ -1,8 +1,14 @@
+import { fileURLToPath } from 'node:url';
+
 import { reactRouter } from '@react-router/dev/vite';
 import wyw from '@wyw-in-js/vite';
 import { defineConfig } from 'vite';
 
+// `~` is `src/`, as in the api, so imports read `~/utils/api`.
+const SRC = fileURLToPath(new URL('./src', import.meta.url));
+
 export default defineConfig({
+  resolve: { alias: { '~': SRC } },
   plugins: [
     wyw({
       include: ['src/**/*.{ts,tsx}'],

@@ -1,4 +1,4 @@
-import { listUnits } from '../../../../modules/sync/read-units';
+import { listUnits } from '~/modules/sync/read-units';
 
 // Every unit, from what Lakeside last said, with its raw code next to its RentLive status.
 const handler = defineEventHandler(async (event) => {

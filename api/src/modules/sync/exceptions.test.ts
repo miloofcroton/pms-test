@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import type { NormalizedSnapshot, RecordException } from '../lakeside/normalize';
-
-import { exceptionsOf } from './exceptions';
-import type { Decision } from './rules';
-import type { SyncPlan } from './sync-pipeline';
+import { exceptionsOf } from '~/modules/sync/exceptions';
+import type { NormalizedSnapshot, RecordException } from '~/modules/lakeside/normalize';
+import type { Decision } from '~/modules/sync/rules';
+import type { SyncPlan } from '~/modules/sync/sync-pipeline';
 
 const snapshotWith = (exceptions: Array<RecordException>): NormalizedSnapshot => {
   return {

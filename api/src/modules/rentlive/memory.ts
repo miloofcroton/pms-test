@@ -1,4 +1,4 @@
-import type { RentLive, RentLiveResident, RentLiveUnit } from './contract';
+import type { RentLive, RentLiveResident, RentLiveUnit } from '~/modules/rentlive/contract';
 
 // An in-memory RentLive for unit tests.
 // It is as strict as the contract allows, so a test fails if the sync moves someone twice or before upserting them.

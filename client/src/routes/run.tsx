@@ -1,12 +1,12 @@
 import { Link } from 'react-router';
 
-import { getJson } from '../api';
-import { Exceptions } from '../components/exceptions';
-import { formatTime, reasonText } from '../format';
-import { callout, code, facts } from '../styles';
-import type { RunDetail } from '../api';
+import { Exceptions } from '~/components/exceptions';
+import { StatusBadge } from '~/routes/runs';
+import { getJson } from '~/utils/api';
+import { formatTime, reasonText } from '~/utils/format';
+import { callout, code, facts } from '~/utils/styles';
+import type { RunDetail } from '~/utils/api';
 
-import { StatusBadge } from './runs';
 import type { Route } from './+types/run';
 
 // One run: what it did, why it stopped if it did, and every exception it found.

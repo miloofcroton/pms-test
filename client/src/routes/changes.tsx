@@ -1,7 +1,7 @@
-import { getJson } from '../api';
-import { ChangeLog } from '../components/change-log';
-import { muted } from '../styles';
-import type { ChangeView, Property } from '../api';
+import { ChangeLog } from '~/components/change-log';
+import { getJson } from '~/utils/api';
+import { muted } from '~/utils/styles';
+import type { ChangeView, Property } from '~/utils/api';
 
 import type { Route } from './+types/changes';
 

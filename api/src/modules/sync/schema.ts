@@ -1,11 +1,10 @@
 import { index, integer, jsonb, pgSchema, primaryKey, serial, text, timestamp } from 'drizzle-orm/pg-core';
 
-import { snapshots } from '../lakeside/schema';
-
-import type { ChangeKind } from './change-log';
-import type { RunError } from './errors';
-import type { ExceptionKind, SyncException } from './exceptions';
-import type { Action, Reason } from './rules';
+import { snapshots } from '~/modules/lakeside/schema';
+import type { ChangeKind } from '~/modules/sync/change-log';
+import type { RunError } from '~/modules/sync/errors';
+import type { ExceptionKind, SyncException } from '~/modules/sync/exceptions';
+import type { Action, Reason } from '~/modules/sync/rules';
 
 // What the sync app did: each run, what it decided for each resident, what changed, and every exception it found.
 export const sync = pgSchema('sync');

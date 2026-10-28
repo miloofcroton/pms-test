@@ -1,9 +1,8 @@
 import { and, desc, eq } from 'drizzle-orm';
 
-import { db } from '../../integrations/postgres';
-
-import { changeLog } from './schema';
-import type { ChangeKind } from './change-log';
+import { db } from '~/integrations/postgres';
+import { changeLog } from '~/modules/sync/schema';
+import type { ChangeKind } from '~/modules/sync/change-log';
 
 // Reads for the change log: the property's feed, and the timelines on the unit and resident pages.
 

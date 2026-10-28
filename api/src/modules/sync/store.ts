@@ -1,8 +1,8 @@
-import type { ChangeEntry } from './change-log';
-import type { RunError } from './errors';
-import type { SyncException } from './exceptions';
-import type { Decision } from './rules';
-import type { RunCounts, RunStatus } from './schema';
+import type { ChangeEntry } from '~/modules/sync/change-log';
+import type { RunError } from '~/modules/sync/errors';
+import type { SyncException } from '~/modules/sync/exceptions';
+import type { Decision } from '~/modules/sync/rules';
+import type { RunCounts, RunStatus } from '~/modules/sync/schema';
 
 // Where the runner keeps the sync app's own records: snapshots, runs, decisions, exceptions and the change log.
 // The runner only reaches storage through this type, so it runs the same against memory in unit tests and Postgres in the app.

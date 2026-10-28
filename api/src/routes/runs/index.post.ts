@@ -1,8 +1,8 @@
-import { fileClient } from '../../modules/lakeside/client';
-import { listSnapshotFiles, snapshotDir, snapshotPathFor } from '../../modules/lakeside/snapshots';
-import { postgresRentLive } from '../../modules/rentlive/postgres';
-import { runSync } from '../../modules/sync/runner';
-import { postgresStore } from '../../modules/sync/store-postgres';
+import { fileClient } from '~/modules/lakeside/client';
+import { listSnapshotFiles, snapshotDir, snapshotPathFor } from '~/modules/lakeside/snapshots';
+import { postgresRentLive } from '~/modules/rentlive/postgres';
+import { runSync } from '~/modules/sync/runner';
+import { postgresStore } from '~/modules/sync/store-postgres';
 
 // Starts a run of one snapshot file: `{ "snapshot": "day1.json" }`.
 // Only a file in the snapshot folder can be named, never a path.

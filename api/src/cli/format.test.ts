@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import type { RunReport } from '../modules/sync/runner';
-
-import { formatReport } from './format';
+import { formatReport } from '~/cli/format';
+import type { RunReport } from '~/modules/sync/runner';
 
 const counts = {
   unitsUpserted: 16,

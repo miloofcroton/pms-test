@@ -1,9 +1,9 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { runDays } from './fixtures';
-import { listChanges } from './read-changes';
-import { getProperty, okSnapshots } from './read-snapshots';
-import type { RunReport } from './runner';
+import { runDays } from '~/modules/sync/fixtures';
+import { listChanges } from '~/modules/sync/read-changes';
+import { getProperty, okSnapshots } from '~/modules/sync/read-snapshots';
+import type { RunReport } from '~/modules/sync/runner';
 
 const PROPERTY = '100';
 let reports: Array<RunReport>;

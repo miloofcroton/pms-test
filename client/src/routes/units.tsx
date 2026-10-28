@@ -1,9 +1,9 @@
 import { Link } from 'react-router';
 
-import { getJson } from '../api';
-import { formatTime, rawCode } from '../format';
-import { badge, code, muted, scroll, table } from '../styles';
-import type { Property, UnitView } from '../api';
+import { getJson } from '~/utils/api';
+import { formatTime, rawCode } from '~/utils/format';
+import { badge, code, muted, scroll, table } from '~/utils/styles';
+import type { Property, UnitView } from '~/utils/api';
 
 import type { Route } from './+types/units';
 

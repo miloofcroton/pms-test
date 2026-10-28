@@ -5,6 +5,7 @@ export default defineNitroConfig({
   srcDir: 'src',
   buildDir: '.build',
   compatibilityDate: '2024-12-16',
+  // Nitro's own `~` alias is `srcDir`, which is what imports use: `~/modules/...`. `vite.config.ts` sets the same for vitest and vite-node.
   ignore: [
     '**/*.test.ts',
     '**/*.spec.ts',

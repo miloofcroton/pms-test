@@ -2,15 +2,14 @@ import { readFileSync } from 'node:fs';
 
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { normalizeSnapshot } from '../lakeside/normalize';
-import type { NormalizedSnapshot } from '../lakeside/normalize';
-
-import { exceptionsOf } from './exceptions';
-import { emptyState, residentKey } from './rentlive-state';
-import { applyPlan, syncPlan } from './sync-pipeline';
-import type { RentLiveState } from './rentlive-state';
-import type { Action } from './rules';
-import type { SyncPlan } from './sync-pipeline';
+import { normalizeSnapshot } from '~/modules/lakeside/normalize';
+import { exceptionsOf } from '~/modules/sync/exceptions';
+import { emptyState, residentKey } from '~/modules/sync/rentlive-state';
+import { applyPlan, syncPlan } from '~/modules/sync/sync-pipeline';
+import type { NormalizedSnapshot } from '~/modules/lakeside/normalize';
+import type { RentLiveState } from '~/modules/sync/rentlive-state';
+import type { Action } from '~/modules/sync/rules';
+import type { SyncPlan } from '~/modules/sync/sync-pipeline';
 
 // The acceptance test: the "expected outcomes per day" table in docs/mock-data-analysis.md, run against the real snapshots.
 // Keys are `unit/resident`.

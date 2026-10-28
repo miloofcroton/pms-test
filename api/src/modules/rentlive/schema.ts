@@ -1,6 +1,6 @@
 import { boolean, pgSchema, primaryKey, text } from 'drizzle-orm/pg-core';
 
-import type { UnitStatus } from './contract';
+import type { UnitStatus } from '~/modules/rentlive/contract';
 
 // What RentLive stores.
 // Only the Postgres RentLive mock touches these tables.

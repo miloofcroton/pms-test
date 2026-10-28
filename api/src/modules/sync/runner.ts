@@ -1,24 +1,23 @@
-import { leavesRecordOut, normalizeSnapshot, peekSnapshot, SnapshotError } from '../lakeside/normalize';
-import type { LakesideClient } from '../lakeside/client';
-import type { NormalizedSnapshot } from '../lakeside/normalize';
-import type { RentLive } from '../rentlive/contract';
-
-import { changesOf } from './change-log';
-import { localToday } from './dates';
-import { crashErrorOf, fetchErrorOf, staleErrorOf, structureErrorOf } from './errors';
-import { exceptionsOf } from './exceptions';
-import { residentKey } from './rentlive-state';
-import { residentsOf } from './residents';
-import { noCounts } from './schema';
-import { syncPlan } from './sync-pipeline';
-import { mapUnitStatus } from './unit-status';
-import type { ChangeEntry } from './change-log';
-import type { RunError } from './errors';
-import type { RentLiveState, ResidentState } from './rentlive-state';
-import type { Resident } from './residents';
-import type { Decision } from './rules';
-import type { RunCounts, RunStatus } from './schema';
-import type { SyncStore } from './store';
+import { leavesRecordOut, normalizeSnapshot, peekSnapshot, SnapshotError } from '~/modules/lakeside/normalize';
+import { changesOf } from '~/modules/sync/change-log';
+import { localToday } from '~/modules/sync/dates';
+import { crashErrorOf, fetchErrorOf, staleErrorOf, structureErrorOf } from '~/modules/sync/errors';
+import { exceptionsOf } from '~/modules/sync/exceptions';
+import { residentKey } from '~/modules/sync/rentlive-state';
+import { residentsOf } from '~/modules/sync/residents';
+import { noCounts } from '~/modules/sync/schema';
+import { syncPlan } from '~/modules/sync/sync-pipeline';
+import { mapUnitStatus } from '~/modules/sync/unit-status';
+import type { LakesideClient } from '~/modules/lakeside/client';
+import type { NormalizedSnapshot } from '~/modules/lakeside/normalize';
+import type { RentLive } from '~/modules/rentlive/contract';
+import type { ChangeEntry } from '~/modules/sync/change-log';
+import type { RunError } from '~/modules/sync/errors';
+import type { RentLiveState, ResidentState } from '~/modules/sync/rentlive-state';
+import type { Resident } from '~/modules/sync/residents';
+import type { Decision } from '~/modules/sync/rules';
+import type { RunCounts, RunStatus } from '~/modules/sync/schema';
+import type { SyncStore } from '~/modules/sync/store';
 
 // Runs one snapshot through the sync, start to finish.
 // This is the one place with I/O: it fetches, reads and writes RentLive, and stores the run, around the pure pipeline.

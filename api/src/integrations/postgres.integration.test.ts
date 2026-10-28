@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
 
-import { db, getDBStatus, runMigrations } from './postgres';
+import { db, getDBStatus, runMigrations } from '~/integrations/postgres';
 
 describe('database', () => {
   it('is reachable', async () => {

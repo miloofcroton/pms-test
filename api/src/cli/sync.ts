@@ -1,12 +1,11 @@
 import { relative, resolve } from 'node:path';
 
-import { closeDB, runMigrations } from '../integrations/postgres';
-import { fileClient } from '../modules/lakeside/client';
-import { postgresRentLive } from '../modules/rentlive/postgres';
-import { runSync } from '../modules/sync/runner';
-import { postgresStore } from '../modules/sync/store-postgres';
-
-import { formatReport } from './format';
+import { formatReport } from '~/cli/format';
+import { closeDB, runMigrations } from '~/integrations/postgres';
+import { fileClient } from '~/modules/lakeside/client';
+import { postgresRentLive } from '~/modules/rentlive/postgres';
+import { runSync } from '~/modules/sync/runner';
+import { postgresStore } from '~/modules/sync/store-postgres';
 
 // Runs one snapshot through the sync and prints what it did: `mise run sync data/day1.json`.
 // It exits with 1 when the run didn't finish, so a script can tell.

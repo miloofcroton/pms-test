@@ -2,13 +2,12 @@ import { basename } from 'node:path';
 
 import { asc, desc, eq, sql } from 'drizzle-orm';
 
-import { db } from '../../integrations/postgres';
-import { snapshots } from '../lakeside/schema';
-
-import { exceptions, runs } from './schema';
-import type { RunError } from './errors';
-import type { SyncException } from './exceptions';
-import type { RunCounts, RunStatus } from './schema';
+import { db } from '~/integrations/postgres';
+import { snapshots } from '~/modules/lakeside/schema';
+import { exceptions, runs } from '~/modules/sync/schema';
+import type { RunError } from '~/modules/sync/errors';
+import type { SyncException } from '~/modules/sync/exceptions';
+import type { RunCounts, RunStatus } from '~/modules/sync/schema';
 
 // Reads for the runs view.
 

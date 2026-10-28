@@ -1,9 +1,9 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { postgresDeps, runDays } from './fixtures';
-import { getRun, listRuns } from './read-runs';
-import { runSync } from './runner';
-import type { RunReport } from './runner';
+import { postgresDeps, runDays } from '~/modules/sync/fixtures';
+import { getRun, listRuns } from '~/modules/sync/read-runs';
+import { runSync } from '~/modules/sync/runner';
+import type { RunReport } from '~/modules/sync/runner';
 
 let reports: Array<RunReport>;
 

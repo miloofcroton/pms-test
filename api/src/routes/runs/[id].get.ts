@@ -1,4 +1,4 @@
-import { getRun } from '../../modules/sync/read-runs';
+import { getRun } from '~/modules/sync/read-runs';
 
 // One run, with its exceptions grouped by kind.
 const handler = defineEventHandler(async (event) => {

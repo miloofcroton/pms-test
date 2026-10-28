@@ -1,8 +1,8 @@
 import { Link } from 'react-router';
 
-import { reasonText } from '../format';
-import { muted } from '../styles';
-import type { RunDetail } from '../api';
+import { reasonText } from '~/utils/format';
+import { muted } from '~/utils/styles';
+import type { RunDetail } from '~/utils/api';
 
 type Exception = RunDetail['exceptions']['data'][number];
 

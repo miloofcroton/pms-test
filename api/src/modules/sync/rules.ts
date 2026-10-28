@@ -1,6 +1,6 @@
-import { addDays } from './dates';
-import type { ResidentState } from './rentlive-state';
-import type { Resident } from './residents';
+import { addDays } from '~/modules/sync/dates';
+import type { ResidentState } from '~/modules/sync/rentlive-state';
+import type { Resident } from '~/modules/sync/residents';
 
 // The brief's move-in and move-out rules.
 // Each decision carries the rule that produced it, so staff can see why someone was or wasn't moved.

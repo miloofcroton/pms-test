@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { decideResident, decideUnit } from './rules';
-import type { ResidentState } from './rentlive-state';
-import type { Resident } from './residents';
-import type { Decision } from './rules';
+import { decideResident, decideUnit } from '~/modules/sync/rules';
+import type { ResidentState } from '~/modules/sync/rentlive-state';
+import type { Resident } from '~/modules/sync/residents';
+import type { Decision } from '~/modules/sync/rules';
 
 const TODAY = '2026-10-27'; // day 1, so the move-in window is 10/14 to 10/27
 

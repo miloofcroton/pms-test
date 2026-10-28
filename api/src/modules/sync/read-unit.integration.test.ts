@@ -1,9 +1,8 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { postgresRentLive } from '../rentlive/postgres';
-
-import { runDays } from './fixtures';
-import { getUnit } from './read-unit';
+import { postgresRentLive } from '~/modules/rentlive/postgres';
+import { runDays } from '~/modules/sync/fixtures';
+import { getUnit } from '~/modules/sync/read-unit';
 
 const PROPERTY = '100';
 

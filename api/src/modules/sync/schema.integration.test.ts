@@ -1,11 +1,10 @@
 import { eq, sql } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
 
-import { db } from '../../integrations/postgres';
-import { snapshots } from '../lakeside/schema';
-
-import { fetchErrorOf } from './errors';
-import { changeLog, decisions, runs } from './schema';
+import { db } from '~/integrations/postgres';
+import { snapshots } from '~/modules/lakeside/schema';
+import { fetchErrorOf } from '~/modules/sync/errors';
+import { changeLog, decisions, runs } from '~/modules/sync/schema';
 
 // A run id no run will ever have, to check the foreign keys.
 const MISSING_RUN = 2_000_000_000;

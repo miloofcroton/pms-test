@@ -1,9 +1,8 @@
 import { and, eq, sql } from 'drizzle-orm';
 
-import { db } from '../../integrations/postgres';
-
-import { rentliveResidents as residents, rentliveUnits as units } from './schema';
-import type { MoveError, RentLive } from './contract';
+import { db } from '~/integrations/postgres';
+import { rentliveResidents as residents, rentliveUnits as units } from '~/modules/rentlive/schema';
+import type { MoveError, RentLive } from '~/modules/rentlive/contract';
 
 // A RentLive mock in Postgres, for running the app.
 // It lasts as long as the `sync` records do, so a restart never forgets who is moved in.

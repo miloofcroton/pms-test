@@ -1,7 +1,6 @@
-import type { NormalizedSnapshot, RecordExceptionReason } from '../lakeside/normalize';
-
-import type { Reason } from './rules';
-import type { SyncPlan } from './sync-pipeline';
+import type { NormalizedSnapshot, RecordExceptionReason } from '~/modules/lakeside/normalize';
+import type { Reason } from '~/modules/sync/rules';
+import type { SyncPlan } from '~/modules/sync/sync-pipeline';
 
 // An exception concerns something inside the data, and the rest of the run goes ahead.
 // Problems with the whole run are errors instead, in `errors.ts`.

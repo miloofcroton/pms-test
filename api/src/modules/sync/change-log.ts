@@ -1,12 +1,11 @@
-import type { Lease, NormalizedSnapshot, Unit } from '../lakeside/normalize';
-
-import { localToday } from './dates';
-import { residentKey } from './rentlive-state';
-import { residentsOf } from './residents';
-import { mapUnitStatus } from './unit-status';
-import type { SyncException } from './exceptions';
-import type { Resident } from './residents';
-import type { Decision } from './rules';
+import { localToday } from '~/modules/sync/dates';
+import { residentKey } from '~/modules/sync/rentlive-state';
+import { residentsOf } from '~/modules/sync/residents';
+import { mapUnitStatus } from '~/modules/sync/unit-status';
+import type { Lease, NormalizedSnapshot, Unit } from '~/modules/lakeside/normalize';
+import type { SyncException } from '~/modules/sync/exceptions';
+import type { Resident } from '~/modules/sync/residents';
+import type { Decision } from '~/modules/sync/rules';
 
 // What a run changed, as entries for `sync.change_log`.
 // It compares the previous run's snapshot with this one, so running the same snapshot again changes nothing and records nothing.

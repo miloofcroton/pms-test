@@ -378,6 +378,9 @@ const sortImportsConfig = {
         // External packages. `react` related packages come first.
         withTypesLast(['react', '@?\\w']),
 
+        // Absolute imports from this package's `src/` (`~/`).
+        withTypesLast(['~/']),
+
         // Parent imports. Put `..` last.
         withTypesLast([`\\.\\.(?!/?${END})`, `\\.\\./?${END}`]),
 

@@ -1,9 +1,8 @@
-import { fileClient } from '../lakeside/client';
-import { postgresRentLive } from '../rentlive/postgres';
-
-import { runSync } from './runner';
-import { postgresStore } from './store-postgres';
-import type { RunReport } from './runner';
+import { fileClient } from '~/modules/lakeside/client';
+import { postgresRentLive } from '~/modules/rentlive/postgres';
+import { runSync } from '~/modules/sync/runner';
+import { postgresStore } from '~/modules/sync/store-postgres';
+import type { RunReport } from '~/modules/sync/runner';
 
 // Helpers for the integration tests, which run the real snapshots against the test database.
 

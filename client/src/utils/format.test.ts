@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { describeChange, formatTime, personName, rawCode, reasonText } from './format';
-import type { ChangeView } from './api';
+import { describeChange, formatTime, personName, rawCode, reasonText } from '~/utils/format';
+import type { ChangeView } from '~/utils/api';
 
 const change = (kind: ChangeView['kind'], details: Record<string, unknown>): ChangeView => {
   return {

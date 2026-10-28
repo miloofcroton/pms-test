@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { mapUnitStatus } from './unit-status';
+import { mapUnitStatus } from '~/modules/sync/unit-status';
 
 describe('mapUnitStatus', () => {
   it.each([

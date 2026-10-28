@@ -1,10 +1,9 @@
 import { and, desc, eq, sql } from 'drizzle-orm';
 
-import { db } from '../../integrations/postgres';
-import { snapshots } from '../lakeside/schema';
-
-import { changeLog, decisions, exceptions, runs } from './schema';
-import type { SyncStore } from './store';
+import { db } from '~/integrations/postgres';
+import { snapshots } from '~/modules/lakeside/schema';
+import { changeLog, decisions, exceptions, runs } from '~/modules/sync/schema';
+import type { SyncStore } from '~/modules/sync/store';
 
 // The `SyncStore` for the app, in the `lakeside` and `sync` schemas.
 

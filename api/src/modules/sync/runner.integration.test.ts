@@ -1,13 +1,12 @@
 import { and, eq, inArray } from 'drizzle-orm';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { db } from '../../integrations/postgres';
-import { snapshots } from '../lakeside/schema';
-
-import { postgresDeps as deps, snapshotPath as day } from './fixtures';
-import { runSync } from './runner';
-import { changeLog, decisions, exceptions, runs } from './schema';
-import type { RunReport } from './runner';
+import { db } from '~/integrations/postgres';
+import { snapshots } from '~/modules/lakeside/schema';
+import { postgresDeps as deps, snapshotPath as day } from '~/modules/sync/fixtures';
+import { runSync } from '~/modules/sync/runner';
+import { changeLog, decisions, exceptions, runs } from '~/modules/sync/schema';
+import type { RunReport } from '~/modules/sync/runner';
 
 // The A1 scenario end to end, on the real tables and the Postgres RentLive mock.
 const PROPERTY = '100';

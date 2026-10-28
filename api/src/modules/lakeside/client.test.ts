@@ -4,7 +4,7 @@ import { join } from 'node:path';
 
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { fileClient } from './client';
+import { fileClient } from '~/modules/lakeside/client';
 
 describe('fileClient.fetchSnapshot', () => {
   let folder: string;

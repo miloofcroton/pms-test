@@ -12,7 +12,9 @@
     "skipLibCheck": true,
     "strict": true,
     "jsx": "react-jsx",
-    "rootDirs": [".", "./.react-router/types"]
+    "rootDirs": [".", "./.react-router/types"],
+    // `~` is `src/`, as in the api: `~/utils/api`.
+    "paths": { "~/*": ["./src/*"] }
   },
   "include": ["src", ".react-router/types/**/*"],
   "exclude": ["node_modules", ".build"]

@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import type { Customer, Lease, NormalizedSnapshot, Unit } from '../lakeside/normalize';
-
-import { changesOf } from './change-log';
-import type { SyncException } from './exceptions';
-import type { Decision } from './rules';
+import { changesOf } from '~/modules/sync/change-log';
+import type { Customer, Lease, NormalizedSnapshot, Unit } from '~/modules/lakeside/normalize';
+import type { SyncException } from '~/modules/sync/exceptions';
+import type { Decision } from '~/modules/sync/rules';
 
 const unit = (overrides: Partial<Unit> = {}): Unit => {
   return {

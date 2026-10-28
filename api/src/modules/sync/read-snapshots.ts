@@ -1,11 +1,10 @@
 import { and, desc, eq } from 'drizzle-orm';
 
-import { db } from '../../integrations/postgres';
-import { normalizeSnapshot } from '../lakeside/normalize';
-import { snapshots } from '../lakeside/schema';
-import type { NormalizedSnapshot, Property } from '../lakeside/normalize';
-
-import { runs } from './schema';
+import { db } from '~/integrations/postgres';
+import { normalizeSnapshot } from '~/modules/lakeside/normalize';
+import { snapshots } from '~/modules/lakeside/schema';
+import { runs } from '~/modules/sync/schema';
+import type { NormalizedSnapshot, Property } from '~/modules/lakeside/normalize';
 
 // The snapshots the reads show: those of a property's successful runs, normalized again from what was stored.
 

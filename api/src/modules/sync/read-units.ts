@@ -1,13 +1,12 @@
 import { and, eq, isNotNull } from 'drizzle-orm';
 
-import { db } from '../../integrations/postgres';
-import { snapshots } from '../lakeside/schema';
-import type { Property, Unit } from '../lakeside/normalize';
-import type { UnitStatus } from '../rentlive/contract';
-
-import { getProperty, okSnapshots } from './read-snapshots';
-import { runs } from './schema';
-import { mapUnitStatus } from './unit-status';
+import { db } from '~/integrations/postgres';
+import { snapshots } from '~/modules/lakeside/schema';
+import { getProperty, okSnapshots } from '~/modules/sync/read-snapshots';
+import { runs } from '~/modules/sync/schema';
+import { mapUnitStatus } from '~/modules/sync/unit-status';
+import type { Property, Unit } from '~/modules/lakeside/normalize';
+import type { UnitStatus } from '~/modules/rentlive/contract';
 
 // Reads for the units view: what Lakeside last said about each unit, with the RentLive status it maps to.
 

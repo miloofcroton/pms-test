@@ -105,5 +105,6 @@ The guiding rule: uphold the contract, and when the data doesn't fit, don't gues
 
 - **Manual approval.** Staff can see why someone was flagged or left out, but can't approve a move by hand (for example, moving Liam in). That's the natural next feature.
 - **Authentication, a property picker and pagination.** There is one property and little data.
+- **Shared API types.** The client and api don't import from each other, so the client keeps its own copy of the API's response types in `client/src/utils/api.ts`. A renamed field in the api would only show up when a page breaks. In production, the api would publish its response types, or an OpenAPI schema the client generates them from.
 - **Committed browser tests.** Each view was checked in a real browser, with a scripted walk through every view and the Playwright MCP, but no browser test is in the repo. The code behind the UI is tested against Postgres.
 - **Retrying a failed move within a run.** A refused move stops the run as a `crash`, and the next run recovers by reading RentLive's state again.

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import type { RentLive, RentLiveResident, RentLiveUnit } from './contract';
+import type { RentLive, RentLiveResident, RentLiveUnit } from '~/modules/rentlive/contract';
 
 // The behavior every RentLive implementation must have, run by each implementation's own test file.
 // Each test gets a fresh property id, so implementations that keep state between tests don't leak into each other.

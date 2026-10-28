@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import type { Customer, Lease, NormalizedSnapshot } from '../lakeside/normalize';
-
-import { effectiveStatus, residentsOf } from './residents';
+import { effectiveStatus, residentsOf } from '~/modules/sync/residents';
+import type { Customer, Lease, NormalizedSnapshot } from '~/modules/lakeside/normalize';
 
 const TODAY = '2026-10-27';
 

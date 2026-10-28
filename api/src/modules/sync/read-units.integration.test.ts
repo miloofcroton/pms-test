@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { runDays } from './fixtures';
-import { listProperties, listUnits } from './read-units';
+import { runDays } from '~/modules/sync/fixtures';
+import { listProperties, listUnits } from '~/modules/sync/read-units';
 
 const PROPERTY = '100';
 

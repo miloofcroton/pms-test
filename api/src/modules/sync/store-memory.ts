@@ -1,7 +1,7 @@
-import type { ChangeEntry } from './change-log';
-import type { SyncException } from './exceptions';
-import type { Decision } from './rules';
-import type { RunOutcome, SnapshotToStore, SyncStore } from './store';
+import type { ChangeEntry } from '~/modules/sync/change-log';
+import type { SyncException } from '~/modules/sync/exceptions';
+import type { Decision } from '~/modules/sync/rules';
+import type { RunOutcome, SnapshotToStore, SyncStore } from '~/modules/sync/store';
 
 // A `SyncStore` in memory, for unit tests, with its tables open so a test can check what was saved.
 

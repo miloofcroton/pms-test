@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { addDays, localToday } from './dates';
+import { addDays, localToday } from '~/modules/sync/dates';
 
 describe('localToday', () => {
   it('uses the property-local date, not the UTC date', () => {

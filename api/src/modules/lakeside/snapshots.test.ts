@@ -4,7 +4,7 @@ import { join } from 'node:path';
 
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { listSnapshotFiles, snapshotPathFor } from './snapshots';
+import { listSnapshotFiles, snapshotPathFor } from '~/modules/lakeside/snapshots';
 
 describe('the snapshot folder', () => {
   let folder: string;

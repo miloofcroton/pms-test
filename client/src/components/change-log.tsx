@@ -1,8 +1,8 @@
 import { Link } from 'react-router';
 
-import { CHANGE_KINDS, describeChange, formatTime } from '../format';
-import { muted, scroll, table } from '../styles';
-import type { ChangeView } from '../api';
+import { CHANGE_KINDS, describeChange, formatTime } from '~/utils/format';
+import { muted, scroll, table } from '~/utils/styles';
+import type { ChangeView } from '~/utils/api';
 
 // A change-log timeline, newest first, with each time in the property's timezone and the run that recorded it.
 

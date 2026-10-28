@@ -1,4 +1,4 @@
-import type { RunReport } from '../modules/sync/runner';
+import type { RunReport } from '~/modules/sync/runner';
 
 // What the CLI prints about a run.
 

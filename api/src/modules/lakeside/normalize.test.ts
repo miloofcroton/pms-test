@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { leavesRecordOut, normalizeSnapshot, parseLakesideDate, peekSnapshot, SnapshotError } from './normalize';
+import { leavesRecordOut, normalizeSnapshot, parseLakesideDate, peekSnapshot, SnapshotError } from '~/modules/lakeside/normalize';
 
 describe('parseLakesideDate', () => {
   it('turns MM/DD/YYYY into ISO', () => {

@@ -1,9 +1,10 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig, mergeConfig } from 'vitest/config';
 
+import viteConfig from './vite.config';
 import { TEST_DATABASE_URL } from './vitest.integration.global';
 
 // Runs against `sync_app_test` in the postgres container, never the app's `sync_app`: `mise run test:integration` starts postgres first.
-export default defineConfig({
+export default mergeConfig(viteConfig, defineConfig({
   test: {
     include: ['src/**/*.integration.test.ts'],
     environment: 'node',
@@ -15,4 +16,4 @@ export default defineConfig({
     // Files share the test database, so they run one at a time.
     fileParallelism: false,
   },
-});
+}));

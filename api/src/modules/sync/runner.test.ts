@@ -1,13 +1,12 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { fileClient } from '../lakeside/client';
-import { createMemoryRentLive } from '../rentlive/memory';
-import type { FetchResult, LakesideClient } from '../lakeside/client';
-import type { RentLive } from '../rentlive/contract';
-
-import { runSync } from './runner';
-import { createMemoryStore } from './store-memory';
-import type { RunReport } from './runner';
+import { fileClient } from '~/modules/lakeside/client';
+import { createMemoryRentLive } from '~/modules/rentlive/memory';
+import { runSync } from '~/modules/sync/runner';
+import { createMemoryStore } from '~/modules/sync/store-memory';
+import type { FetchResult, LakesideClient } from '~/modules/lakeside/client';
+import type { RentLive } from '~/modules/rentlive/contract';
+import type { RunReport } from '~/modules/sync/runner';
 
 const day = (n: number): string => {
   return new URL(`../../../../data/day${n}.json`, import.meta.url).pathname;

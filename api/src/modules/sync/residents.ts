@@ -1,7 +1,6 @@
-import type { NormalizedSnapshot } from '../lakeside/normalize';
-
-import { addDays } from './dates';
-import { residentKey } from './rentlive-state';
+import { addDays } from '~/modules/sync/dates';
+import { residentKey } from '~/modules/sync/rentlive-state';
+import type { NormalizedSnapshot } from '~/modules/lakeside/normalize';
 
 // RentLive residents from a normalized snapshot: one per person per unit, whatever number of leases they are on there.
 

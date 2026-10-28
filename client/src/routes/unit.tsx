@@ -1,11 +1,11 @@
 import { Link } from 'react-router';
 
-import { getJson } from '../api';
-import { ChangeLog } from '../components/change-log';
-import { Exceptions } from '../components/exceptions';
-import { formatTime, personName, rawCode } from '../format';
-import { badge, code, good, muted, scroll, table } from '../styles';
-import type { UnitDetail } from '../api';
+import { ChangeLog } from '~/components/change-log';
+import { Exceptions } from '~/components/exceptions';
+import { getJson } from '~/utils/api';
+import { formatTime, personName, rawCode } from '~/utils/format';
+import { badge, code, good, muted, scroll, table } from '~/utils/styles';
+import type { UnitDetail } from '~/utils/api';
 
 import type { Route } from './+types/unit';
 

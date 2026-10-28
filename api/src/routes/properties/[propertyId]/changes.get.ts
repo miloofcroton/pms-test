@@ -1,5 +1,5 @@
-import { listChanges } from '../../../modules/sync/read-changes';
-import { getProperty } from '../../../modules/sync/read-snapshots';
+import { listChanges } from '~/modules/sync/read-changes';
+import { getProperty } from '~/modules/sync/read-snapshots';
 
 // The property's whole change log, newest first, with its timezone so the UI can show each time locally.
 const handler = defineEventHandler(async (event) => {

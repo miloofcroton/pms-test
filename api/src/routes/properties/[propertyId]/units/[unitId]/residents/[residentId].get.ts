@@ -1,5 +1,5 @@
-import { postgresRentLive } from '../../../../../../modules/rentlive/postgres';
-import { getResident } from '../../../../../../modules/sync/read-resident';
+import { postgresRentLive } from '~/modules/rentlive/postgres';
+import { getResident } from '~/modules/sync/read-resident';
 
 // One resident on one unit: who they are, whether they're moved in, why, their exceptions and their change log.
 const handler = defineEventHandler(async (event) => {

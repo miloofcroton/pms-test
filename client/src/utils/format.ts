@@ -1,14 +1,10 @@
-import type { RecordExceptionReason } from '../../api/src/modules/lakeside/normalize';
-import type { RunError } from '../../api/src/modules/sync/errors';
-import type { Reason } from '../../api/src/modules/sync/rules';
-
-import type { ChangeView } from './api';
+import type { ChangeView, DataReason, DecisionReason, RunErrorReason } from '~/utils/api';
 
 // How the views show times, reasons and change-log entries.
 
-export type AnyReason = Reason | RecordExceptionReason | RunError['reason'];
+export type AnyReason = DecisionReason | DataReason | RunErrorReason;
 
-// Typed against the api's unions, so a new reason without a sentence fails the typecheck.
+// Typed against the reason unions in `api.ts`, so a reason without a sentence fails the typecheck.
 const REASONS: Record<AnyReason, string> = {
   // Decisions.
   moved_in: 'Moved in: every move-in rule passed.',

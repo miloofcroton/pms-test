@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll } from 'vitest';
 
-import { closeDB, db, runMigrations } from './src/integrations/postgres';
+import { closeDB, db, runMigrations } from '~/integrations/postgres';
 
 // Runs around every integration test file: the test database is migrated and emptied first, so a file sees only its own rows.
 beforeAll(async () => {

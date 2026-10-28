@@ -1,11 +1,10 @@
-import type { NormalizedSnapshot } from '../lakeside/normalize';
-
-import { localToday } from './dates';
-import { residentKey } from './rentlive-state';
-import { residentsOf } from './residents';
-import { decideUnit } from './rules';
-import type { RentLiveState, ResidentState } from './rentlive-state';
-import type { Decision } from './rules';
+import { localToday } from '~/modules/sync/dates';
+import { residentKey } from '~/modules/sync/rentlive-state';
+import { residentsOf } from '~/modules/sync/residents';
+import { decideUnit } from '~/modules/sync/rules';
+import type { NormalizedSnapshot } from '~/modules/lakeside/normalize';
+import type { RentLiveState, ResidentState } from '~/modules/sync/rentlive-state';
+import type { Decision } from '~/modules/sync/rules';
 
 // The pure sync pipeline: a normalized Lakeside snapshot and what RentLive has stored go in, and what to do about each resident comes out.
 // No I/O, so every rule can be tested without a database.

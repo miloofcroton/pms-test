@@ -1,9 +1,9 @@
 import { Form, Link, useNavigation } from 'react-router';
 
-import { getJson, postJson } from '../api';
-import { formatTime, reasonText } from '../format';
-import { bad, badge, buttons, callout, good, muted, scroll, table, warn } from '../styles';
-import type { RunReport, RunSummary } from '../api';
+import { getJson, postJson } from '~/utils/api';
+import { formatTime, reasonText } from '~/utils/format';
+import { bad, badge, buttons, callout, good, muted, scroll, table, warn } from '~/utils/styles';
+import type { RunReport, RunSummary } from '~/utils/api';
 
 import type { Route } from './+types/runs';
 

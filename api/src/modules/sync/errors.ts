@@ -1,5 +1,5 @@
-import type { FetchResult } from '../lakeside/client';
-import type { SnapshotError } from '../lakeside/normalize';
+import type { FetchResult } from '~/modules/lakeside/client';
+import type { SnapshotError } from '~/modules/lakeside/normalize';
 
 // An error concerns a whole run: the snapshot couldn't be fetched or read, was out of date, or the run broke.
 // A run has at most one, stored on the run itself, and nothing in the snapshot is applied.

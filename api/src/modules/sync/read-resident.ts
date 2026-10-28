@@ -1,19 +1,18 @@
 import { and, eq } from 'drizzle-orm';
 
-import { db } from '../../integrations/postgres';
-import type { Property } from '../lakeside/normalize';
-import type { RentLive, ResidentRemoteState } from '../rentlive/contract';
-
-import { localToday } from './dates';
-import { listChanges } from './read-changes';
-import { okSnapshots } from './read-snapshots';
-import { runExceptions } from './read-unit';
-import { residentsOf } from './residents';
-import { decisions } from './schema';
-import type { SyncException } from './exceptions';
-import type { ChangeView } from './read-changes';
-import type { Resident } from './residents';
-import type { Action, Reason } from './rules';
+import { db } from '~/integrations/postgres';
+import { localToday } from '~/modules/sync/dates';
+import { listChanges } from '~/modules/sync/read-changes';
+import { okSnapshots } from '~/modules/sync/read-snapshots';
+import { runExceptions } from '~/modules/sync/read-unit';
+import { residentsOf } from '~/modules/sync/residents';
+import { decisions } from '~/modules/sync/schema';
+import type { Property } from '~/modules/lakeside/normalize';
+import type { RentLive, ResidentRemoteState } from '~/modules/rentlive/contract';
+import type { SyncException } from '~/modules/sync/exceptions';
+import type { ChangeView } from '~/modules/sync/read-changes';
+import type { Resident } from '~/modules/sync/residents';
+import type { Action, Reason } from '~/modules/sync/rules';
 
 // Reads for the resident detail page: one resident on one unit, and why they were or weren't moved.
 

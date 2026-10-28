@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { SnapshotError } from '../lakeside/normalize';
-
-import { crashErrorOf, fetchErrorOf, staleErrorOf, structureErrorOf } from './errors';
+import { SnapshotError } from '~/modules/lakeside/normalize';
+import { crashErrorOf, fetchErrorOf, staleErrorOf, structureErrorOf } from '~/modules/sync/errors';
 
 describe('fetchErrorOf', () => {
   it.each([

@@ -1,10 +1,11 @@
 import { isRouteErrorResponse, Links, Meta, NavLink, Outlet, Scripts, ScrollRestoration, useRouteLoaderData } from 'react-router';
 import { css } from '@linaria/core';
 
-import { getJson } from './api';
-import { nav, page } from './styles';
+import { getJson } from '~/utils/api';
+import { nav, page } from '~/utils/styles';
+import type { Property } from '~/utils/api';
+
 import type { Route } from './+types/root';
-import type { Property } from './api';
 
 export const globals = css`
   :global() {

@@ -1,18 +1,17 @@
 import { and, asc, eq } from 'drizzle-orm';
 
-import { db } from '../../integrations/postgres';
-import type { Customer, Property } from '../lakeside/normalize';
-import type { RentLive } from '../rentlive/contract';
-
-import { listChanges } from './read-changes';
-import { okSnapshots } from './read-snapshots';
-import { unitView } from './read-units';
-import { effectiveStatus } from './residents';
-import { exceptions } from './schema';
-import type { SyncException } from './exceptions';
-import type { ChangeView } from './read-changes';
-import type { OkSnapshot } from './read-snapshots';
-import type { UnitView } from './read-units';
+import { db } from '~/integrations/postgres';
+import { listChanges } from '~/modules/sync/read-changes';
+import { okSnapshots } from '~/modules/sync/read-snapshots';
+import { unitView } from '~/modules/sync/read-units';
+import { effectiveStatus } from '~/modules/sync/residents';
+import { exceptions } from '~/modules/sync/schema';
+import type { Customer, Property } from '~/modules/lakeside/normalize';
+import type { RentLive } from '~/modules/rentlive/contract';
+import type { SyncException } from '~/modules/sync/exceptions';
+import type { ChangeView } from '~/modules/sync/read-changes';
+import type { OkSnapshot } from '~/modules/sync/read-snapshots';
+import type { UnitView } from '~/modules/sync/read-units';
 
 // Reads for the unit detail page.
 
