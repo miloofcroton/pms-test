@@ -9,6 +9,18 @@ dist/
 build/
 .build/
 
+# nitro
+.nitro/
+.output/
+.data/
+.cache/
+
+# react router
+.react-router/
+
+# env
+.env
+
 # debug
 npm-debug.*
 yarn-debug.*
