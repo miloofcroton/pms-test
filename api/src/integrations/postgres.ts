@@ -9,7 +9,7 @@ const pool = new pg.Pool({
 // Shared by every schema in modules/, so it imports none of them.
 export const db = drizzle(pool, { casing: 'snake_case' });
 
-export async function getDBStatus(): Promise<'up' | 'down'> {
+export const getDBStatus = async (): Promise<'up' | 'down'> => {
   try {
     await pool.query('select 1');
     return 'up';
@@ -17,13 +17,13 @@ export async function getDBStatus(): Promise<'up' | 'down'> {
   catch {
     return 'down';
   }
-}
+};
 
-export async function closeDB(): Promise<void> {
+export const closeDB = async (): Promise<void> => {
   await pool.end();
-}
+};
 
 // Relative to the working directory: the api dir in dev, /app in the image.
-export async function runMigrations(): Promise<void> {
+export const runMigrations = async (): Promise<void> => {
   await migrate(db, { migrationsFolder: 'drizzle' });
-}
+};

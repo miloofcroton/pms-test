@@ -10,7 +10,7 @@ export const globals = css`
   }
 `;
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <head>
@@ -26,12 +26,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </body>
     </html>
   );
-}
+};
 
-export function HydrateFallback() {
+export const HydrateFallback = () => {
   return <p>Loading…</p>;
-}
+};
 
-export default function App() {
+const App = () => {
   return <Outlet />;
-}
+};
+
+export default App;

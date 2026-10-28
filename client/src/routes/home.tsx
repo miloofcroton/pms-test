@@ -13,7 +13,7 @@ type Health = {
   timestamp: string
 };
 
-export default function Home() {
+const Home = () => {
   const [health, setHealth] = useState<Health | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,4 +31,6 @@ export default function Home() {
       {health && <pre>{JSON.stringify(health, null, 2)}</pre>}
     </main>
   );
-}
+};
+
+export default Home;
