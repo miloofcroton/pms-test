@@ -5,18 +5,27 @@ import { closeDB, db, runMigrations } from '../../integrations/postgres';
 import { snapshots } from '../lakeside/schema';
 
 import { fetchErrorOf } from './errors';
+import { freshProperty, removeCreatedProperties, removeRuns } from './fixtures';
 import { changeLog, decisions, runs } from './schema';
 
 // A run id no run will ever have, to check the foreign keys.
 const MISSING_RUN = 2_000_000_000;
 
+const PROPERTY = freshProperty('schema');
+// Runs that belong to no property, so they're deleted by id.
+const noPropertyRuns: Array<number> = [];
+
 beforeAll(runMigrations);
-afterAll(closeDB);
+afterAll(async () => {
+  await removeRuns(noPropertyRuns);
+  await removeCreatedProperties();
+  await closeDB();
+});
 
 const insertSnapshot = async (): Promise<number> => {
   const [snapshot] = await db.insert(snapshots)
     .values({
-      propertyId: '100',
+      propertyId: PROPERTY,
       source: 'data/day1.json',
       generatedAt: new Date('2026-10-28T06:30:00Z'),
       body: {},
@@ -71,6 +80,7 @@ describe('sync.runs', () => {
         },
       })
       .returning();
+    noPropertyRuns.push(run.id);
     expect(snapshot).toMatchObject({
       propertyId: null,
       generatedAt: null,
@@ -91,6 +101,7 @@ describe('sync.runs', () => {
         error,
       })
       .returning();
+    noPropertyRuns.push(run.id);
     const [stored] = await db.select()
       .from(runs)
       .where(eq(runs.id, run.id));
@@ -113,7 +124,7 @@ describe('foreign keys to sync.runs', () => {
   it('rejects a decision for a run that does not exist', async () => {
     await expect(db.insert(decisions)
       .values({
-        propertyId: '100',
+        propertyId: PROPERTY,
         unitRemoteId: '5001',
         residentRemoteId: '3001',
         action: 'none',
@@ -125,7 +136,7 @@ describe('foreign keys to sync.runs', () => {
   it('rejects a change-log entry for a run that does not exist', async () => {
     await expect(db.insert(changeLog)
       .values({
-        propertyId: '100',
+        propertyId: PROPERTY,
         kind: 'unit_created',
         runId: MISSING_RUN,
       })).rejects.toThrow();

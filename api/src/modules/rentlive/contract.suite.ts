@@ -5,7 +5,8 @@ import type { RentLive, RentLiveResident, RentLiveUnit } from './contract';
 // The behavior every RentLive implementation must have, run by each implementation's own test file.
 // Each test gets a fresh property id, so implementations that keep state between tests don't leak into each other.
 
-let nextProperty = 0;
+// Every property id the suite used, so an implementation that keeps state can delete it afterwards.
+export const contractPropertyIds: Array<string> = [];
 
 const unit = (overrides: Partial<RentLiveUnit> = {}): RentLiveUnit => {
   return {
@@ -37,8 +38,8 @@ export const rentLiveContractSuite = (name: string, rentLive: () => RentLive): v
     let api: RentLive;
 
     beforeEach(() => {
-      nextProperty += 1;
-      property = `contract-${Date.now()}-${nextProperty}`;
+      property = `contract-${Date.now()}-${contractPropertyIds.length + 1}`;
+      contractPropertyIds.push(property);
       api = rentLive();
     });
 

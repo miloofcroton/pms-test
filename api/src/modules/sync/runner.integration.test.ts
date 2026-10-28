@@ -2,54 +2,25 @@ import { and, eq, inArray } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { closeDB, db, runMigrations } from '../../integrations/postgres';
-import { fileClient } from '../lakeside/client';
 import { snapshots } from '../lakeside/schema';
-import { postgresRentLive } from '../rentlive/postgres';
-import type { LakesideClient } from '../lakeside/client';
 
+import { freshProperty, postgresDeps, removeCreatedProperties, removeRuns, snapshotPath as day } from './fixtures';
 import { runSync } from './runner';
 import { changeLog, decisions, exceptions, runs } from './schema';
-import { postgresStore } from './store-postgres';
 import type { RunReport } from './runner';
 
-// The A1 scenario end to end, on the real tables and the Postgres RentLive mock.
-// The database is shared, so the property gets an id of its own: every snapshot is fetched with `property.id` replaced.
-const PROPERTY = `runner-${Date.now()}`;
-
-const day = (n: number): string => {
-  return new URL(`../../../../data/day${n}.json`, import.meta.url).pathname;
-};
-
-const asProperty = (propertyId: string): LakesideClient => {
-  return {
-    fetchSnapshot: async (source) => {
-      const result = await fileClient.fetchSnapshot(source);
-      if (!result.ok) {
-        return result;
-      }
-      const snapshot = result.snapshot as { property: Record<string, unknown> };
-      return {
-        ok: true,
-        snapshot: {
-          ...snapshot,
-          property: {
-            ...snapshot.property,
-            id: propertyId,
-          },
-        },
-      };
-    },
-  };
-};
-
-const deps = {
-  lakeside: asProperty(PROPERTY),
-  rentLive: postgresRentLive,
-  store: postgresStore,
-};
+// The A1 scenario end to end, on the real tables and the Postgres RentLive mock, under a property id of its own.
+const PROPERTY = freshProperty('runner');
+const deps = postgresDeps(PROPERTY);
+// Runs that never got a snapshot belong to no property, so they're deleted by id.
+const noSnapshotRuns: Array<number> = [];
 
 beforeAll(runMigrations);
-afterAll(closeDB);
+afterAll(async () => {
+  await removeRuns(noSnapshotRuns);
+  await removeCreatedProperties();
+  await closeDB();
+});
 
 describe('runSync on Postgres, days 1 to 3, each run twice', () => {
   const reports: Array<RunReport> = [];
@@ -137,6 +108,7 @@ describe('runSync on Postgres, days 1 to 3, each run twice', () => {
 describe('runSync on Postgres, a failed fetch', () => {
   it('stores the run with its error and no snapshot', async () => {
     const report = await runSync('data/missing.json', deps);
+    noSnapshotRuns.push(report.runId);
     const [stored] = await db.select()
       .from(runs)
       .where(eq(runs.id, report.runId));

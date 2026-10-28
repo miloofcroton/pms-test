@@ -16,6 +16,7 @@
 - Test-driven: write the failing tests first, show them failing, then make them pass. The cases come from `docs/mock-data-analysis.md`, so add a row there for any new case.
 - Unit tests (`*.test.ts`, `mise run test:unit`) cover pure code and need no database. Integration tests (`*.integration.test.ts`, `mise run test:integration`) run against the local postgres.
 - Integration tests share the one local database with the app. Never assume a table is empty: give each test its own ids, for example a fresh property id, and assert only on the rows it wrote.
+- Integration tests clean up after themselves, so the app never shows their rows. Use `freshProperty` and `removeCreatedProperties` from `modules/sync/fixtures.ts`, and `removeRuns` for runs that belong to no property.
 - A red integration test can leave rows that block a later migration. `mise run db:reset` wipes the database and starts it empty.
 - Every error kind and every exception kind has a test at the layer that produces it, and a runner test that checks how it is stored.
 
