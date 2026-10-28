@@ -2,18 +2,17 @@ import { readFileSync } from 'node:fs';
 
 import { beforeAll, describe, expect, it } from 'vitest';
 
+import { normalizeSnapshot } from '../lakeside/normalize';
+import type { NormalizedSnapshot } from '../lakeside/normalize';
+
 import { applyPlan, emptyState, residentKey, syncPlan } from './sync-plan';
 import type { Action, RentLiveState, SyncPlan } from './sync-plan';
 
 // The acceptance test: the "expected outcomes per day" table in docs/mock-data-analysis.md, run against the real snapshots.
 // Keys are `unit/resident`.
 
-/**
- *
-*/
-
-function snapshot(day: number): unknown {
-  return JSON.parse(readFileSync(new URL(`../../../../data/day${day}.json`, import.meta.url), 'utf8'));
+function snapshot(day: number): NormalizedSnapshot {
+  return normalizeSnapshot(JSON.parse(readFileSync(new URL(`../../../../data/day${day}.json`, import.meta.url), 'utf8')));
 }
 
 function withAction(plan: SyncPlan, action: Action): Array<string> {
@@ -30,8 +29,8 @@ function flagged(plan: SyncPlan): Array<string> {
     .sort();
 }
 
-function issueLeases(plan: SyncPlan): Array<string> {
-  return plan.issues
+function issueLeases(snapshot: NormalizedSnapshot): Array<string> {
+  return snapshot.issues
     .map((i) => i.leaseRemoteId)
     .sort();
 }
@@ -44,14 +43,16 @@ function movedIn(state: RentLiveState): Array<string> {
 }
 
 describe('days 1 to 3, in order', () => {
-  // plans[n] is day n + 1.
+  // snapshots[n] and plans[n] are day n + 1.
   // states[n] is RentLive after day n, so states[0] is empty.
+  const snapshots: Array<NormalizedSnapshot> = [];
   const plans: Array<SyncPlan> = [];
   const states: Array<RentLiveState> = [emptyState()];
 
   beforeAll(() => {
     for (const day of [1, 2, 3]) {
-      const plan = syncPlan(snapshot(day), states[day - 1]);
+      snapshots.push(snapshot(day));
+      const plan = syncPlan(snapshots[day - 1], states[day - 1]);
       plans.push(plan);
       states.push(applyPlan(states[day - 1], plan));
     }
@@ -87,7 +88,7 @@ describe('days 1 to 3, in order', () => {
     });
 
     it('reports the leases for Paul and Quinn', () => {
-      expect(issueLeases(plans[0])).toEqual([
+      expect(issueLeases(snapshots[0])).toEqual([
         '9015', // Paul, unit 5099 isn't in the snapshot
         '9017', // Quinn, no unit
       ]);
@@ -145,7 +146,7 @@ describe('days 1 to 3, in order', () => {
     });
 
     it('still reports the leases for Paul and Quinn', () => {
-      expect(issueLeases(plans[1])).toEqual(['9015', '9017']);
+      expect(issueLeases(snapshots[1])).toEqual(['9015', '9017']);
     });
   });
 
@@ -177,7 +178,7 @@ describe('days 1 to 3, in order', () => {
   describe('running each day again', () => {
     for (const day of [1, 2, 3]) {
       it(`changes nothing on day ${day}`, () => {
-        const rerun = syncPlan(snapshot(day), states[day]);
+        const rerun = syncPlan(snapshots[day - 1], states[day]);
         expect(withAction(rerun, 'move_in')).toEqual([]);
         expect(withAction(rerun, 'move_out')).toEqual([]);
         expect(flagged(rerun)).toEqual(flagged(plans[day - 1]));

@@ -1,4 +1,6 @@
-// The pure sync pipeline: a raw Lakeside snapshot and what RentLive has stored go in, and what to do about each resident comes out.
+import type { NormalizedSnapshot } from '../lakeside/normalize';
+
+// The pure sync pipeline: a normalized Lakeside snapshot and what RentLive has stored go in, and what to do about each resident comes out.
 // No I/O, so every rule can be tested without a database.
 
 /** What RentLive stores for one resident on one unit. */
@@ -23,16 +25,9 @@ export type Decision = {
   flagged: boolean;
 };
 
-/** A lease that could not be placed on a unit, so none of its people were synced. */
-export type Issue = {
-  leaseRemoteId: string;
-  reason: string;
-};
-
 export type SyncPlan = {
   today: string;
   decisions: Array<Decision>;
-  issues: Array<Issue>;
 };
 
 export function residentKey(unitRemoteId: string, residentRemoteId: string): string {
@@ -43,7 +38,7 @@ export function emptyState(): RentLiveState {
   return new Map();
 }
 
-export function syncPlan(raw: unknown, state: RentLiveState): SyncPlan {
+export function syncPlan(snapshot: NormalizedSnapshot, state: RentLiveState): SyncPlan {
   throw new Error('Not implemented');
 }
 
