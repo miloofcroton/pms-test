@@ -25,3 +25,6 @@ npm-debug.*
 # claude
 .claude/settings.local.json
 .notes
+
+# playwright mcp snapshots and logs
+.playwright-mcp
