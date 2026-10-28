@@ -1,9 +1,8 @@
 import type { AST, Rule } from 'eslint';
 
 /**
- * Arrays are multi-line by choice: put one line break anywhere inside the brackets (after `[`,
- * between elements, or before `]`) and every gap gets one, so each element sits on its own line
- * and neither bracket shares a line with an element. An array with no break stays as written.
+ * Arrays are multi-line by choice: put one line break anywhere inside the brackets (after `[`, between elements, or before `]`) and every gap gets one, so each element sits on its own line and neither bracket shares a line with an element.
+ * An array with no break stays as written.
  * Only breaks in those gaps count, so a multi-line element does not force its siblings apart.
  */
 const arrayNewline: Rule.RuleModule = {
@@ -82,11 +81,9 @@ type ChainNode = {
 const asNode = (node: ChainNode) => node as unknown as Rule.Node;
 
 /**
- * A chain with more than one `.method()` call is multi-line: `boolean().notNull().default(false)`
- * puts `.notNull()` and `.default(false)` on their own lines. A shorter chain stays as written
- * until a line break is put before any `.`, which then breaks every `.` in that chain. When the
- * chain starts at a plain name, as in `db.select()`, that first `.` stays with its head unless it
- * has a break itself.
+ * A chain with more than one `.method()` call is multi-line: `boolean().notNull().default(false)` puts `.notNull()` and `.default(false)` on their own lines.
+ * A shorter chain stays as written until a line break is put before any `.`, which then breaks every `.` in that chain.
+ * When the chain starts at a plain name, as in `db.select()`, that first `.` stays with its head unless it has a break itself.
  */
 const chainNewline: Rule.RuleModule = {
   meta: {

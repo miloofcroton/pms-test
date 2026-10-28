@@ -59,10 +59,9 @@ const codeStyleConfig = {
     '@stylistic/object-curly-spacing': ['error', 'always'],
     '@stylistic/array-bracket-spacing': ['error', 'never'],
 
-    // Anything with more than one member is fully multi-line: the braces break
-    // (`object-curly-newline`) and each member gets its own line
-    // (`object-property-newline`). One-member objects stay inline. The two rules
-    // are a pair: the first alone permits `{\n a: 1, b: 2\n}`.
+    // Anything with more than one member is fully multi-line: the braces break (`object-curly-newline`) and each member gets its own line (`object-property-newline`).
+    // One-member objects stay inline.
+    // The two rules are a pair: the first alone permits `{\n a: 1, b: 2\n}`.
     '@stylistic/object-curly-newline': ['error', {
       ObjectExpression: {
         multiline: true,
@@ -157,10 +156,8 @@ const reactConfig = {
 };
 
 /**
- * `simple-import-sort` matches its group patterns against the module source with a NUL appended
- * when the statement is `import type`. `valueOnly` and `typeOnly` pin a pattern to one kind, so
- * pairing every pattern with a type-only twin sorts type imports directly after the value imports
- * of the same group, with no blank line between them.
+ * `simple-import-sort` matches its group patterns against the module source with a NUL appended when the statement is `import type`.
+ * `valueOnly` and `typeOnly` pin a pattern to one kind, so pairing every pattern with a type-only twin sorts type imports directly after the value imports of the same group, with no blank line between them.
  */
 const END = '\\u0000?$';
 const valueOnly = '(?![^\\u0000]+\\u0000$)';
@@ -181,8 +178,7 @@ const sortImportsConfig = {
     'import/first': 'error',
     'import/newline-after-import': 'error',
 
-    // Lift inline `type` specifiers into their own `import type` statement, so the groups below
-    // have something to sort.
+    // Lift inline `type` specifiers into their own `import type` statement, so the groups below have something to sort.
     'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
 
     'simple-import-sort/exports': 'off',
