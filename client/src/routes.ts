@@ -7,4 +7,5 @@ export default [
   route('properties/:propertyId/units', 'routes/units.tsx'),
   route('properties/:propertyId/units/:unitId', 'routes/unit.tsx'),
   route('properties/:propertyId/units/:unitId/residents/:residentId', 'routes/resident.tsx'),
+  route('properties/:propertyId/changes', 'routes/changes.tsx'),
 ] satisfies RouteConfig;
