@@ -1,6 +1,6 @@
 import { integer, jsonb, pgSchema, primaryKey, serial, text, timestamp } from 'drizzle-orm/pg-core';
 
-import { snapshots } from '../integrations/lakeside/schema';
+import { snapshots } from '../lakeside/schema';
 
 // What the sync app did: each run, what it decided for each resident, and what changed.
 export const sync = pgSchema('sync');

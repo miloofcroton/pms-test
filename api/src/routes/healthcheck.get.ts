@@ -1,4 +1,4 @@
-import { getDBStatus } from '../integrations/postgres/connection';
+import { getDBStatus } from '../integrations/postgres';
 
 export default defineEventHandler(async () => ({
   status: 'healthy',

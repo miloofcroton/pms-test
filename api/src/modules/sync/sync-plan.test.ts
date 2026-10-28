@@ -13,7 +13,7 @@ import type { Action, RentLiveState, SyncPlan } from './sync-plan';
 */
 
 function snapshot(day: number): unknown {
-  return JSON.parse(readFileSync(new URL(`../../../data/day${day}.json`, import.meta.url), 'utf8'));
+  return JSON.parse(readFileSync(new URL(`../../../../data/day${day}.json`, import.meta.url), 'utf8'));
 }
 
 function withAction(plan: SyncPlan, action: Action): Array<string> {

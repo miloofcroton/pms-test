@@ -4,9 +4,9 @@ export default defineConfig({
   dialect: 'postgresql',
   casing: 'snake_case',
   schema: [
-    './src/integrations/lakeside/schema.ts',
-    './src/integrations/rentlive/schema.ts',
-    './src/store/schema.ts',
+    './src/modules/lakeside/schema.ts',
+    './src/modules/rentlive/schema.ts',
+    './src/modules/sync/schema.ts',
   ],
   out: './drizzle',
   schemaFilter: [
