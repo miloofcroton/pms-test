@@ -3,10 +3,18 @@ import { defineConfig } from 'drizzle-kit';
 export default defineConfig({
   dialect: 'postgresql',
   casing: 'snake_case',
-  schema: ['./src/store/*.schema.ts', './src/clients/*/*.schema.ts'],
+  schema: [
+    './src/integrations/lakeside/schema.ts',
+    './src/integrations/rentlive/schema.ts',
+    './src/store/schema.ts',
+  ],
   out: './drizzle',
-  schemaFilter: ['rentlive', 'sync'],
+  schemaFilter: [
+    'lakeside_normal',
+    'rentlive',
+    'sync_audit',
+  ],
   dbCredentials: {
-    url: process.env.DATABASE_URL ?? 'postgres://sync:sync_dev_password@localhost:5432/sync',
+    url: process.env.DATABASE_URL ?? 'postgres://sync_app:sync_app_dev_password@localhost:5432/sync_app',
   },
 });

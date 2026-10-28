@@ -1,140 +1,12 @@
 {
-  "id": "8d57e4ca-f81b-4198-8644-da82661ab650",
+  "id": "c9f44fdd-547d-498b-9dcc-5b13258d2394",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "sync.change_log": {
-      "name": "change_log",
-      "schema": "sync",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "run_id": {
-          "name": "run_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "property_id": {
-          "name": "property_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "unit_remote_id": {
-          "name": "unit_remote_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "resident_remote_id": {
-          "name": "resident_remote_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "kind": {
-          "name": "kind",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "details": {
-          "name": "details",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::jsonb"
-        },
-        "recorded_at": {
-          "name": "recorded_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "sync.decisions": {
-      "name": "decisions",
-      "schema": "sync",
-      "columns": {
-        "property_id": {
-          "name": "property_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "unit_remote_id": {
-          "name": "unit_remote_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "resident_remote_id": {
-          "name": "resident_remote_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "action": {
-          "name": "action",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "reason": {
-          "name": "reason",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "run_id": {
-          "name": "run_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "decided_at": {
-          "name": "decided_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "decisions_property_id_unit_remote_id_resident_remote_id_pk": {
-          "name": "decisions_property_id_unit_remote_id_resident_remote_id_pk",
-          "columns": [
-            "property_id",
-            "unit_remote_id",
-            "resident_remote_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "sync.lease_customers": {
+    "lakeside_normal.lease_customers": {
       "name": "lease_customers",
-      "schema": "sync",
+      "schema": "lakeside_normal",
       "columns": {
         "property_id": {
           "name": "property_id",
@@ -220,9 +92,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "sync.leases": {
+    "lakeside_normal.leases": {
       "name": "leases",
-      "schema": "sync",
+      "schema": "lakeside_normal",
       "columns": {
         "property_id": {
           "name": "property_id",
@@ -277,9 +149,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "sync.properties": {
+    "lakeside_normal.properties": {
       "name": "properties",
-      "schema": "sync",
+      "schema": "lakeside_normal",
       "columns": {
         "id": {
           "name": "id",
@@ -298,6 +170,191 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "sync_audit.change_log": {
+      "name": "change_log",
+      "schema": "sync_audit",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "run_id": {
+          "name": "run_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "property_id": {
+          "name": "property_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unit_remote_id": {
+          "name": "unit_remote_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resident_remote_id": {
+          "name": "resident_remote_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "details": {
+          "name": "details",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "recorded_at": {
+          "name": "recorded_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "sync_audit.decisions": {
+      "name": "decisions",
+      "schema": "sync_audit",
+      "columns": {
+        "property_id": {
+          "name": "property_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unit_remote_id": {
+          "name": "unit_remote_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "resident_remote_id": {
+          "name": "resident_remote_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "run_id": {
+          "name": "run_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "decided_at": {
+          "name": "decided_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "decisions_property_id_unit_remote_id_resident_remote_id_pk": {
+          "name": "decisions_property_id_unit_remote_id_resident_remote_id_pk",
+          "columns": [
+            "property_id",
+            "unit_remote_id",
+            "resident_remote_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "sync_audit.runs": {
+      "name": "runs",
+      "schema": "sync_audit",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "property_id": {
+          "name": "property_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "snapshot_file": {
+          "name": "snapshot_file",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "generated_at": {
+          "name": "generated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "finished_at": {
+          "name": "finished_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "counts": {
+          "name": "counts",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
         }
       },
       "indexes": {},
@@ -448,69 +505,13 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
-    },
-    "sync.runs": {
-      "name": "runs",
-      "schema": "sync",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "property_id": {
-          "name": "property_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "snapshot_file": {
-          "name": "snapshot_file",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "generated_at": {
-          "name": "generated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "started_at": {
-          "name": "started_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "finished_at": {
-          "name": "finished_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "counts": {
-          "name": "counts",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::jsonb"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
     }
   },
   "enums": {},
   "schemas": {
-    "rentlive": "rentlive",
-    "sync": "sync"
+    "lakeside_normal": "lakeside_normal",
+    "sync_audit": "sync_audit",
+    "rentlive": "rentlive"
   },
   "sequences": {},
   "roles": {},

@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, it } from 'vitest';
 
-import { closeDB, getDBStatus } from './db';
+import { closeDB, getDBStatus } from './connection';
 
 describe('database', () => {
   afterAll(closeDB);

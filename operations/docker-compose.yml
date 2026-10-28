@@ -1,19 +1,19 @@
-name: sync
+name: sync-app
 
 services:
   db:
     image: postgres:17-alpine
-    container_name: sync-db
+    container_name: sync-app-db
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=sync
-      - POSTGRES_PASSWORD=sync_dev_password
-      - POSTGRES_DB=sync
+      - POSTGRES_USER=sync_app
+      - POSTGRES_PASSWORD=sync_app_dev_password
+      - POSTGRES_DB=sync_app
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U sync -d sync"]
+      test: ["CMD-SHELL", "pg_isready -U sync_app -d sync_app"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -22,13 +22,13 @@ services:
     build:
       context: ../api
       dockerfile: Dockerfile
-    container_name: sync-api
+    container_name: sync-app-api
     ports:
       - "4444:4444"
     environment:
       - NODE_ENV=production
       - PORT=4444
-      - DATABASE_URL=postgres://sync:sync_dev_password@db:5432/sync
+      - DATABASE_URL=postgres://sync_app:sync_app_dev_password@db:5432/sync_app
     depends_on:
       db:
         condition: service_healthy
@@ -37,7 +37,7 @@ services:
     build:
       context: ../client
       dockerfile: Dockerfile
-    container_name: sync-client
+    container_name: sync-app-client
     ports:
       - "8080:8080"
     depends_on:

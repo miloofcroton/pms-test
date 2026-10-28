@@ -1,5 +1,5 @@
 {
-  "name": "sync-client",
+  "name": "sync-app-client",
   "private": true,
   "type": "module",
   "devDependencies": {

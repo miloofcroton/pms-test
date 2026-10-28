@@ -1,5 +1,5 @@
 {
-  "name": "sync-api",
+  "name": "sync-app-api",
   "private": true,
   "type": "module",
   "devDependencies": {
