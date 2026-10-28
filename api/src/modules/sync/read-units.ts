@@ -1,4 +1,5 @@
 import { and, eq, isNotNull } from 'drizzle-orm';
+import type { UnitView } from '@sync-app/shared';
 
 import { db } from '~/integrations/postgres';
 import { snapshots } from '~/modules/lakeside/schema';
@@ -6,18 +7,11 @@ import { getProperty, okSnapshots } from '~/modules/sync/read-snapshots';
 import { runs } from '~/modules/sync/schema';
 import { mapUnitStatus } from '~/modules/sync/unit-status';
 import type { Property, Unit } from '~/modules/lakeside/normalize';
-import type { UnitStatus } from '~/modules/rentlive/contract';
 
 // Reads for the units view: what Lakeside last said about each unit, with the RentLive status it maps to.
 
-export type UnitView = {
-  remoteId: string;
-  unitNumber: string;
-  buildingName: string | null;
-  floorplanName: string | null;
-  rawStatus: string | null;
-  status: UnitStatus;
-};
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { UnitView };
 
 export const unitView = (unit: Unit): UnitView => {
   return {

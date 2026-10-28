@@ -1,3 +1,5 @@
+import type { RunReport } from '@sync-app/shared';
+
 import { leavesRecordOut, normalizeSnapshot, peekSnapshot, SnapshotError } from '~/modules/lakeside/normalize';
 import { changesOf } from '~/modules/sync/change-log';
 import { localToday } from '~/modules/sync/dates';
@@ -16,24 +18,18 @@ import type { RunError } from '~/modules/sync/errors';
 import type { RentLiveState, ResidentState } from '~/modules/sync/rentlive-state';
 import type { Resident } from '~/modules/sync/residents';
 import type { Decision } from '~/modules/sync/rules';
-import type { RunCounts, RunStatus } from '~/modules/sync/schema';
 import type { SyncStore } from '~/modules/sync/store';
 
 // Runs one snapshot through the sync, start to finish.
 // This is the one place with I/O: it fetches, reads and writes RentLive, and stores the run, around the pure pipeline.
 
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { RunReport };
+
 export type RunnerDeps = {
   lakeside: LakesideClient;
   rentLive: RentLive;
   store: SyncStore;
-};
-
-export type RunReport = {
-  runId: number;
-  status: Exclude<RunStatus, 'running'>;
-  error: RunError | null;
-  counts: RunCounts;
-  changes: Array<ChangeEntry>;
 };
 
 export const runSync = async (source: string, { lakeside, rentLive, store }: RunnerDeps): Promise<RunReport> => {

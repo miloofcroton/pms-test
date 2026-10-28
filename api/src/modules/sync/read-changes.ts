@@ -1,20 +1,13 @@
 import { and, desc, eq } from 'drizzle-orm';
+import type { ChangeView } from '@sync-app/shared';
 
 import { db } from '~/integrations/postgres';
 import { changeLog } from '~/modules/sync/schema';
-import type { ChangeKind } from '~/modules/sync/change-log';
 
 // Reads for the change log: the property's feed, and the timelines on the unit and resident pages.
 
-export type ChangeView = {
-  id: number;
-  runId: number;
-  recordedAt: string;
-  kind: ChangeKind;
-  unitRemoteId: string | null;
-  residentRemoteId: string | null;
-  details: Record<string, unknown>;
-};
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { ChangeView };
 
 /** Newest first. With a unit, its own entries and its residents'; with a resident too, just theirs. */
 export const listChanges = async (propertyId: string, filter: {

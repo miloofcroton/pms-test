@@ -1,4 +1,5 @@
 import { and, eq } from 'drizzle-orm';
+import type { ResidentDetail } from '@sync-app/shared';
 
 import { db } from '~/integrations/postgres';
 import { localToday } from '~/modules/sync/dates';
@@ -7,35 +8,13 @@ import { okSnapshots } from '~/modules/sync/read-snapshots';
 import { runExceptions } from '~/modules/sync/read-unit';
 import { residentsOf } from '~/modules/sync/residents';
 import { decisions } from '~/modules/sync/schema';
-import type { Property } from '~/modules/lakeside/normalize';
-import type { RentLive, ResidentRemoteState } from '~/modules/rentlive/contract';
-import type { SyncException } from '~/modules/sync/exceptions';
-import type { ChangeView } from '~/modules/sync/read-changes';
+import type { RentLive } from '~/modules/rentlive/contract';
 import type { Resident } from '~/modules/sync/residents';
-import type { Action, Reason } from '~/modules/sync/rules';
 
 // Reads for the resident detail page: one resident on one unit, and why they were or weren't moved.
 
-export type ResidentDetail = Omit<Resident, 'unitRemoteId' | 'residentRemoteId'> & {
-  property: Property;
-  unitRemoteId: string;
-  residentRemoteId: string;
-  // False when the latest snapshot doesn't have them, so this is from the newest one that did.
-  inLatestSnapshot: boolean;
-  seenGeneratedAt: string;
-  // Null when RentLive never stored them, because the sync never upserted them.
-  rentLive: ResidentRemoteState | null;
-  // The rule behind the latest decision about them.
-  decision: {
-    action: Action;
-    reason: Reason;
-    runId: number;
-    decidedAt: string
-  } | null;
-  // From the latest successful run.
-  exceptions: Array<SyncException>;
-  changes: Array<ChangeView>;
-};
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { ResidentDetail };
 
 export const getResident = async (
   propertyId: string,

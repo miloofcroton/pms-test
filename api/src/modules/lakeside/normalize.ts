@@ -1,13 +1,13 @@
 import { isDeepStrictEqual } from 'node:util';
 
+import type { DataReason, Property } from '@sync-app/shared';
+
 // Turns a raw Lakeside snapshot into clean, typed data for the sync module.
 // It fixes Lakeside's format (dates, ids, empty strings, nesting) but keeps Lakeside's values as sent, because interpreting them is the sync module's job.
 
-export type Property = {
-  remoteId: string;
-  name: string;
-  timezone: string;
-};
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { Property };
+export type RecordExceptionReason = DataReason;
 
 export type Unit = {
   remoteId: string;
@@ -42,24 +42,6 @@ export type Lease = {
   endDate: string | null;
   customers: Array<Customer>;
 };
-
-export type RecordExceptionReason =
-  // Two copies of a unit disagree, so the unit is left out rather than one copy chosen.
-  | 'duplicate_unit_differs'
-  // The lease's unit was left out because its copies disagree, so the lease is left out too.
-  | 'lease_on_conflicting_unit'
-  // The lease names no unit, so it is left out.
-  | 'lease_without_unit'
-  // The lease's unit is not in the snapshot, so it is left out.
-  | 'lease_unit_not_in_snapshot'
-  // `customers.customer` is not a list, so the lease is left out.
-  | 'lease_customers_not_a_list'
-  // No interval matches `leaseIntervalId`, so the lease has no dates.
-  | 'lease_interval_not_found'
-  // The interval in effect has a date that isn't MM/DD/YYYY, so the lease has no dates.
-  | 'lease_interval_invalid_date'
-  // A move-in or move-out date isn't MM/DD/YYYY, so the customer is left out.
-  | 'customer_invalid_date';
 
 // An error concerns the whole snapshot, and an exception concerns something inside it.
 // A `SnapshotError` means the structure breaks the contract: it is thrown, the whole run fails, and nobody is moved.

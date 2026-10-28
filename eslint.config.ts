@@ -317,6 +317,17 @@ const typescriptConfig = {
     '@typescript-eslint/prefer-function-type': 'error',
     '@typescript-eslint/prefer-namespace-keyword': 'error',
     '@typescript-eslint/array-type': ['error', { default: 'generic' }],
+
+    // The shared package is types only, so neither build has to resolve it.
+    '@typescript-eslint/no-restricted-imports': ['error', {
+      paths: [
+        {
+          name: '@sync-app/shared',
+          message: 'Import @sync-app/shared with `import type`: it is types only, and neither build resolves it.',
+          allowTypeImports: true,
+        },
+      ],
+    }],
   },
 };
 

@@ -1,8 +1,10 @@
+import type { UnitStatus } from '@sync-app/shared';
+
 // The RentLive contract from the brief.
 // RentLive owns the database and the workflows; the sync app only ever reaches it through this type.
 
-/** RentLive stores a unit status from a fixed list. */
-export type UnitStatus = 'Occupied' | 'Vacant' | 'Model' | 'Common Area' | 'Down';
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { UnitStatus };
 
 export type RentLiveUnit = {
   remoteId: string;

@@ -66,8 +66,8 @@ run = "npm --prefix api run test:integration"
 description = "Start postgres, then run the api integration tests"
 
 [tasks."test:types"]
-run = ["npm --prefix api run typecheck", "npm --prefix client run typecheck"]
-description = "Typecheck api and client"
+run = ["npx tsc -p shared", "npm --prefix api run typecheck", "npm --prefix client run typecheck"]
+description = "Typecheck shared, api and client"
 
 [tasks."test:lint"]
 run = "npm run lint"

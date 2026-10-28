@@ -1,3 +1,5 @@
+import type { RunError, RunErrorKind } from '@sync-app/shared';
+
 import type { FetchResult } from '~/modules/lakeside/client';
 import type { SnapshotError } from '~/modules/lakeside/normalize';
 
@@ -6,19 +8,8 @@ import type { SnapshotError } from '~/modules/lakeside/normalize';
 // The run's status is `refused` for a `stale` error, since nothing went wrong, and `failed` for the rest.
 // Problems inside the data are exceptions instead, in `exceptions.ts`.
 
-export type RunErrorKind = 'fetch' | 'structure' | 'stale' | 'crash';
-
-export type RunError = {
-  kind: RunErrorKind;
-  reason:
-    | 'snapshot_not_found'
-    | 'snapshot_unreadable'
-    | 'snapshot_invalid_json'
-    | 'invalid_structure'
-    | 'snapshot_older_than_last_run'
-    | 'run_crashed';
-  details: Record<string, unknown>;
-};
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { RunErrorKind, RunError };
 
 const FETCH_REASONS = {
   not_found: 'snapshot_not_found',

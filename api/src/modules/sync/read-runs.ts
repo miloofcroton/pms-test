@@ -1,37 +1,18 @@
 import { basename } from 'node:path';
 
 import { asc, desc, eq, sql } from 'drizzle-orm';
+import type { RunDetail, RunSummary } from '@sync-app/shared';
 
 import { db } from '~/integrations/postgres';
 import { snapshots } from '~/modules/lakeside/schema';
 import { exceptions, runs } from '~/modules/sync/schema';
 import type { RunError } from '~/modules/sync/errors';
-import type { SyncException } from '~/modules/sync/exceptions';
 import type { RunCounts, RunStatus } from '~/modules/sync/schema';
 
 // Reads for the runs view.
 
-export type RunSummary = {
-  id: number;
-  source: string;
-  snapshotFile: string;
-  // Null when the run never got a readable snapshot.
-  propertyId: string | null;
-  timezone: string | null;
-  generatedAt: string | null;
-  startedAt: string;
-  finishedAt: string | null;
-  status: RunStatus;
-  error: RunError | null;
-  counts: RunCounts;
-};
-
-export type RunDetail = RunSummary & {
-  exceptions: {
-    data: Array<SyncException>;
-    review: Array<SyncException>
-  };
-};
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { RunSummary, RunDetail };
 
 const summaryColumns = {
   id: runs.id,

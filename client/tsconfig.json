@@ -14,7 +14,11 @@
     "jsx": "react-jsx",
     "rootDirs": [".", "./.react-router/types"],
     // `~` is `src/`, as in the api: `~/utils/api`.
-    "paths": { "~/*": ["./src/*"] }
+    // `@sync-app/shared` is the types the client shares with the api, imported with `import type` only.
+    "paths": {
+      "~/*": ["./src/*"],
+      "@sync-app/shared": ["../shared/src/index.ts"]
+    }
   },
   "include": ["src", ".react-router/types/**/*"],
   "exclude": ["node_modules", ".build"]

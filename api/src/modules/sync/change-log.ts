@@ -1,3 +1,5 @@
+import type { ChangeEntry, ChangeKind } from '@sync-app/shared';
+
 import { localToday } from '~/modules/sync/dates';
 import { residentKey } from '~/modules/sync/rentlive-state';
 import { residentsOf } from '~/modules/sync/residents';
@@ -10,25 +12,8 @@ import type { Decision } from '~/modules/sync/rules';
 // What a run changed, as entries for `sync.change_log`.
 // It compares the previous run's snapshot with this one, so running the same snapshot again changes nothing and records nothing.
 
-export type ChangeKind =
-  | 'unit_created'
-  | 'unit_status_changed'
-  | 'unit_updated'
-  | 'lease_added'
-  | 'lease_changed'
-  | 'lease_removed'
-  | 'resident_created'
-  | 'resident_updated'
-  | 'moved_in'
-  | 'moved_out'
-  | 'flagged_for_review';
-
-export type ChangeEntry = {
-  kind: ChangeKind;
-  unitRemoteId: string | null;
-  residentRemoteId: string | null;
-  details: Record<string, unknown>;
-};
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { ChangeKind, ChangeEntry };
 
 export type ChangeInput = {
   // The snapshot of the property's last successful run, or null on the first run.

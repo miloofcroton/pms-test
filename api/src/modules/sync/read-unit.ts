@@ -1,4 +1,5 @@
 import { and, asc, eq } from 'drizzle-orm';
+import type { LeasePerson, LeaseView, MovedInView, UnitDetail } from '@sync-app/shared';
 
 import { db } from '~/integrations/postgres';
 import { listChanges } from '~/modules/sync/read-changes';
@@ -6,50 +7,15 @@ import { okSnapshots } from '~/modules/sync/read-snapshots';
 import { unitView } from '~/modules/sync/read-units';
 import { effectiveStatus } from '~/modules/sync/residents';
 import { exceptions } from '~/modules/sync/schema';
-import type { Customer, Property } from '~/modules/lakeside/normalize';
+import type { Customer } from '~/modules/lakeside/normalize';
 import type { RentLive } from '~/modules/rentlive/contract';
 import type { SyncException } from '~/modules/sync/exceptions';
-import type { ChangeView } from '~/modules/sync/read-changes';
 import type { OkSnapshot } from '~/modules/sync/read-snapshots';
-import type { UnitView } from '~/modules/sync/read-units';
 
 // Reads for the unit detail page.
 
-export type LeasePerson = {
-  residentRemoteId: string;
-  firstName: string | null;
-  lastName: string | null;
-  type: string;
-  // The customer's own status, or null when the lease status applies.
-  status: string | null;
-  effectiveStatus: string;
-};
-
-export type LeaseView = {
-  remoteId: string;
-  status: string;
-  startDate: string | null;
-  endDate: string | null;
-  people: Array<LeasePerson>;
-};
-
-export type MovedInView = {
-  residentRemoteId: string;
-  leaseRemoteId: string;
-  firstName: string | null;
-  lastName: string | null;
-};
-
-export type UnitDetail = {
-  property: Property;
-  generatedAt: string;
-  unit: UnitView;
-  leases: Array<LeaseView>;
-  movedIn: Array<MovedInView>;
-  // From the latest successful run.
-  exceptions: Array<SyncException>;
-  changes: Array<ChangeView>;
-};
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { LeasePerson, LeaseView, MovedInView, UnitDetail };
 
 /** One run's exceptions, narrowed to a unit and, optionally, one resident on it. */
 export const runExceptions = async (runId: number, unitRemoteId: string, residentRemoteId?: string): Promise<Array<SyncException>> => {

@@ -1,5 +1,6 @@
-import type { NormalizedSnapshot, RecordExceptionReason } from '~/modules/lakeside/normalize';
-import type { Reason } from '~/modules/sync/rules';
+import type { ExceptionKind, SyncException } from '@sync-app/shared';
+
+import type { NormalizedSnapshot } from '~/modules/lakeside/normalize';
 import type { SyncPlan } from '~/modules/sync/sync-pipeline';
 
 // An exception concerns something inside the data, and the rest of the run goes ahead.
@@ -7,16 +8,8 @@ import type { SyncPlan } from '~/modules/sync/sync-pipeline';
 // `data`: one record broke the contract and was left out, or kept without the broken part.
 // `review`: the data is valid, but the rules can't settle the case safely, so a decision was flagged and nobody was moved.
 
-export type ExceptionKind = 'data' | 'review';
-
-export type SyncException = {
-  kind: ExceptionKind;
-  propertyId: string;
-  reason: RecordExceptionReason | Reason;
-  unitRemoteId: string | null;
-  leaseRemoteId: string | null;
-  residentRemoteId: string | null;
-};
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { ExceptionKind, SyncException };
 
 /** The record exceptions from normalizing, then the flagged decisions, as rows for `sync.exceptions`. */
 export const exceptionsOf = (snapshot: NormalizedSnapshot, plan: SyncPlan): Array<SyncException> => {

@@ -14,7 +14,7 @@ paths:
 ## Imports
 
 - Import with `~/`, which means that package's own `src/`, never with a relative path: `~/modules/sync/runner` in the api, `~/utils/api` in the client.
-- The client and api never import from each other.
+- The client and api never import from each other. What both need lives in `shared/src/index.ts`, imported as `@sync-app/shared` with `import type` only: it is types, and neither build resolves it.
 - The only relative imports are React Router's generated `./+types/...`, and imports inside config files, which load before the alias exists.
 
 ## Comments

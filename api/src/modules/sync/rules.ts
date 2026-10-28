@@ -1,3 +1,5 @@
+import type { Action, DecisionReason } from '@sync-app/shared';
+
 import { addDays } from '~/modules/sync/dates';
 import type { ResidentState } from '~/modules/sync/rentlive-state';
 import type { Resident } from '~/modules/sync/residents';
@@ -5,40 +7,9 @@ import type { Resident } from '~/modules/sync/residents';
 // The brief's move-in and move-out rules.
 // Each decision carries the rule that produced it, so staff can see why someone was or wasn't moved.
 
-export type Action = 'move_in' | 'move_out' | 'none';
-
-export type Reason =
-  // Not moved in, and every move-in rule passed.
-  | 'moved_in'
-  // Guarantors and occupants are never moved in.
-  | 'not_a_lease_signer'
-  // Not one of the four customer types, so it is not guessed at. Flagged.
-  | 'unknown_customer_type'
-  | 'not_current'
-  // A resident who was moved out is never moved in again automatically.
-  | 'previously_moved_out'
-  // Current lease signer with no move-in date to check against the window. Flagged.
-  | 'no_move_in_date'
-  | 'move_in_date_in_future'
-  // The move-in date is older than the last 14 days, counting today.
-  | 'move_in_date_outside_window'
-  // Current, but the move-out date is today or earlier, which contradicts the status. Flagged.
-  | 'move_out_date_not_in_future'
-  // Moved in and still Current.
-  | 'stays_current'
-  // Moved in, not Current, and the move-out date is today or earlier.
-  | 'moved_out'
-  | 'move_out_date_in_future'
-  // Moved in and not Current, but there is no move-out date to act on. Flagged.
-  | 'no_move_out_date'
-  // Would move in, but someone from a different lease is still moved in on the unit. Flagged.
-  | 'other_lease_moved_in'
-  // Would move in, but so would someone from a different lease on the same unit. Flagged.
-  | 'competing_leases'
-  // Moved in on RentLive, but the snapshot no longer has them, so nothing says they left. Flagged.
-  | 'missing_from_snapshot'
-  // Moved in on RentLive, but Past for more than 14 days, so the brief says not to sync them. Flagged.
-  | 'past_beyond_sync_window';
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { Action };
+export type Reason = DecisionReason;
 
 export type Outcome = {
   action: Action;

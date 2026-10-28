@@ -1,0 +1,6 @@
+{
+  "name": "@sync-app/shared",
+  "private": true,
+  "type": "module",
+  "types": "./src/index.ts"
+}

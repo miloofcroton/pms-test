@@ -1,4 +1,5 @@
 import { index, integer, jsonb, pgSchema, primaryKey, serial, text, timestamp } from 'drizzle-orm/pg-core';
+import type { RunCounts, RunStatus } from '@sync-app/shared';
 
 import { snapshots } from '~/modules/lakeside/schema';
 import type { ChangeKind } from '~/modules/sync/change-log';
@@ -7,24 +8,11 @@ import type { ExceptionKind, SyncException } from '~/modules/sync/exceptions';
 import type { Action, Reason } from '~/modules/sync/rules';
 
 // What the sync app did: each run, what it decided for each resident, what changed, and every exception it found.
+
+// Shared with the client, so defined once in `@sync-app/shared`.
+export type { RunStatus, RunCounts };
+
 export const sync = pgSchema('sync');
-
-// `ok`: the run finished.
-// `refused`: a `stale` error, because the snapshot was older than the last run's, so nothing was applied.
-// `failed`: any other error stopped it.
-export type RunStatus = 'running' | 'ok' | 'refused' | 'failed';
-
-// The brief's counts for the runs view.
-export type RunCounts = {
-  unitsUpserted: number;
-  residentsUpserted: number;
-  movedIn: number;
-  movedOut: number;
-  // Records never upserted to RentLive: those a data exception left out (see `leavesRecordOut`), and residents the 14-day rule doesn't sync.
-  skipped: number;
-  // Decisions flagged for review: review exceptions.
-  flagged: number;
-};
 
 export const noCounts: RunCounts = {
   unitsUpserted: 0,
